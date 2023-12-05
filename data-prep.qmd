@@ -1,0 +1,140 @@
+---
+title: "Data Preparation"
+---
+
+This page goes through how we generate the data set [laxflights2022](data/laxflights2022.csv) that is used throughout this project.
+
+## Loading packages
+
+We load [tidyverse](https://www.tidyverse.org/) for general data manipulation and [anyflights](https://simonpcouch.github.io/anyflights/) to download the data.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(anyflights)
+```
+
+## Downloading the data
+
+The data set we are using can be downloaded with a single call to `get_flights()` 
+
+```{r}
+#| eval: false
+laxflights2022raw <- get_flights("LAX", year = 2022, months = 1:12)
+```
+
+To avoid repeated downloads, we save the data set right after we download it. Can be found at [data-raw/laxflights2022raw.csv](data-raw/laxflights2022raw.csv).
+
+```{r}
+#| eval: false
+write_csv(laxflights2022raw, "data-raw/laxflights2022raw.csv")
+```
+
+```{r}
+#| echo: false
+laxflights2022raw <- read_csv("data-raw/laxflights2022raw.csv", show_col_types = FALSE)
+```
+
+::: {.callout-tip}
+## Bad internet connection
+
+If you are having issues with downloading this data all at once then you can split up the download into smaller chunks like so:
+
+```r
+laxflights1 <- anyflights("LAX", 2022, 1:6)
+laxflights2 <- anyflights("LAX", 2022, 7:12)
+
+
+laxflights2022raw <- dplyr::bind_rows(
+  laxflights1$flights,
+  laxflights2$flights
+)
+```
+:::
+
+## Cleaning the data
+
+We will do two things to this data set:
+
+- remove redundant variables
+- remove variables that won't be available at the prediction time
+
+When looking at the data
+
+```{r}
+glimpse(laxflights2022raw)
+```
+
+the first thing we notice is that `time_hour` encodes almost the same information as `year`, `month`, `day`, `hour` and `minute`. With `minute` being the only difference. Let us deal with this by adding the minutes to `time_hour` and only keeping that variable
+
+```{r}
+laxflights2022 <- laxflights2022raw |>
+  mutate(time = time_hour + minutes(minute)) |>
+  select(-c(year, month, day, hour, minute, time_hour))
+
+glimpse(laxflights2022)
+```
+
+Next, we see that the combination of `dep_time`, `sched_dep_time` and `dep_delay` is linearly dependent as `dep_time - sched_dep_time = dep_delay`, so we can remove `sched_dep_time` and `dep_time` without losing any information since we also have `sched_dep_time` as a function of `time`. 
+
+```{r}
+laxflights2022 <- laxflights2022 |>
+  select(-c(sched_dep_time, dep_time))
+
+glimpse(laxflights2022)
+```
+
+On a similar note, since we are trying to predict `arr_delay`, we can't have `arr_time` or `air_time` in the data set as they allow us to figure out `arr_delay` from `dep_time`. With some loss of information, we will also remove `sched_arr_time` to make the modeling a little easier.
+
+```{r}
+laxflights2022 <- laxflights2022 |>
+  select(-c(arr_time, air_time, sched_arr_time))
+
+glimpse(laxflights2022)
+```
+
+We will also be removing the `flight` variable to have one less high cardinality variable to work with.
+
+```{r}
+laxflights2022 <- laxflights2022 |>
+  select(-flight)
+
+glimpse(laxflights2022)
+```
+
+Since we are trying to model `arr_delay` we exclude all the flights where that information is missing.
+
+```{r}
+laxflights2022 <- laxflights2022 |>
+  drop_na(arr_delay)
+
+glimpse(laxflights2022)
+```
+
+Lastly, the outcome `arr_delay` has been moved to the beginning of the data set as it aids in investigating the data.
+
+```{r}
+laxflights2022 <- laxflights2022 |>
+  relocate(arr_delay)
+
+glimpse(laxflights2022)
+```
+
+## Saving the data
+
+The full data set is now ready and is saved as [data/laxflights2022.csv](data/laxflights2022.csv).
+
+```{r}
+write_csv(laxflights2022, "data/laxflights2022.csv")
+```
+
+## Data dictionary
+
+- `arr_delay`: Arrival delays, in minutes. Negative times represent early arrivals.
+- `dep_delay`: Departure delays, in minutes. Negative times represent early departures.
+- `carrier`: Two letter carrier abbreviation.
+- `tailnum`: Plane tail number.
+- `origin`: FAA airport code for origin of flight.
+- `dest`: FAA airport code for destination of flight.
+- `distance`: Distance between airports, in miles.
+- `time`: Scheduled time of the flight as a POSIXct date, rounded to the nearest minute.

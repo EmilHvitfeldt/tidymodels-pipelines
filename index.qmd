@@ -1,0 +1,36 @@
+---
+title: tidymodels pipelines
+---
+
+The goal of this project is to show how [tidymodels](https://www.tidymodels.org/) can be used with different services, cloud providers and techniques. 
+
+Each pipeline will try to show how tidymodels can be used with another software solution. All the pipelines are expanded versions of the "standard pipeline" which just uses R and tidymodels:
+
+- [Standard Pipeline](pipelines/standard/index.qmd)
+
+All other pipelines can be found in the [pipelines](pipelines.qmd) list.
+
+The modeling problem we are creating solutions for is stated as the following:
+
+> Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay `arr_delay`.
+
+## Data source
+
+The data sources used in the pipelines within this project will largely be the same data set. This is done to move focus away from the modeling problem and towards how tidymodels can be used with other software.
+
+The data set that is used, is generated using the [anyflights](https://simonpcouch.github.io/anyflights/) package. The standard data set includes all the flights departing from [LAX](https://www.flylax.com/) in the year 2022.
+
+```{r}
+library(readr)
+
+laxflights2022 <- read_csv("data/laxflights2022.csv", show_col_types = FALSE)
+
+dplyr::glimpse(laxflights2022)
+```
+
+### Why this data set?
+
+- Proposes a realistic enough modeling problem
+- More data can be fetched to showcase larger data problems
+- Data from more airports can be used together to showcase a "many models" approach
+- USA Government data -> friendly data license 

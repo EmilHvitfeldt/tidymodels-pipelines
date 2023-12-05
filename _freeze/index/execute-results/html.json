@@ -1,0 +1,14 @@
+{
+  "hash": "8f3fa63fc3131f2b327f0a6843ab7bfc",
+  "result": {
+    "markdown": "---\ntitle: tidymodels pipelines\n---\n\n\nThe goal of this project is to show how [tidymodels](https://www.tidymodels.org/) can be used with different services, cloud providers and techniques. \n\nEach pipeline will try to show how tidymodels can be used with another software solution. All the pipelines are expanded versions of the \"standard pipeline\" which just uses R and tidymodels:\n\n- [Standard Pipeline](pipelines/standard/index.qmd)\n\nAll other pipelines can be found in the [pipelines](pipelines.qmd) list.\n\nThe modeling problem we are creating solutions for is stated as the following:\n\n> Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay `arr_delay`.\n\n## Data source\n\nThe data sources used in the pipelines within this project will largely be the same data set. This is done to move focus away from the modeling problem and towards how tidymodels can be used with other software.\n\nThe data set that is used, is generated using the [anyflights](https://simonpcouch.github.io/anyflights/) package. The standard data set includes all the flights departing from [LAX](https://www.flylax.com/) in the year 2022.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(readr)\n\nlaxflights2022 <- read_csv(\"data/laxflights2022.csv\", show_col_types = FALSE)\n\ndplyr::glimpse(laxflights2022)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nRows: 187,868\nColumns: 8\n$ arr_delay <dbl> -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 122, -1…\n$ dep_delay <dbl> 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, 16, -…\n$ carrier   <chr> \"UA\", \"AA\", \"NK\", \"AA\", \"NK\", \"NK\", \"UA\", \"NK\", \"DL\", \"NK\", …\n$ tailnum   <chr> \"N57864\", \"N919NN\", \"N949NK\", \"N812AA\", \"N903NK\", \"N509NK\", …\n$ origin    <chr> \"LAX\", \"LAX\", \"LAX\", \"LAX\", \"LAX\", \"LAX\", \"LAX\", \"LAX\", \"LAX…\n$ dest      <chr> \"IAH\", \"BNA\", \"CLE\", \"PHL\", \"PIT\", \"DTW\", \"ORD\", \"IAH\", \"MSP…\n$ distance  <dbl> 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1235, …\n$ time      <dttm> 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…\n```\n:::\n:::\n\n\n### Why this data set?\n\n- Proposes a realistic enough modeling problem\n- More data can be fetched to showcase larger data problems\n- Data from more airports can be used together to showcase a \"many models\" approach\n- USA Government data -> friendly data license ",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.104">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Preparation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./pipelines.html" rel="" target="">
+ <span class="menu-text">Pipelines</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./data-prep.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Data Preparation</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link active" data-scroll-target="#loading-packages">Loading packages</a></li>
+  <li><a href="#downloading-the-data" id="toc-downloading-the-data" class="nav-link" data-scroll-target="#downloading-the-data">Downloading the data</a></li>
+  <li><a href="#cleaning-the-data" id="toc-cleaning-the-data" class="nav-link" data-scroll-target="#cleaning-the-data">Cleaning the data</a></li>
+  <li><a href="#saving-the-data" id="toc-saving-the-data" class="nav-link" data-scroll-target="#saving-the-data">Saving the data</a></li>
+  <li><a href="#data-dictionary" id="toc-data-dictionary" class="nav-link" data-scroll-target="#data-dictionary">Data dictionary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Preperation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This page goes through how we generate the data set <a href="data/laxflights2022.csv">laxflights2022</a> that is used throughout this project.</p>
+<section id="loading-packages" class="level2">
+<h2 class="anchored" data-anchor-id="loading-packages">Loading packages</h2>
+<p>We load <a href="https://www.tidyverse.org/">tidyverse</a> for general data manipulation and <a href="https://simonpcouch.github.io/anyflights/">anyflights</a> to download the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(anyflights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="downloading-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-the-data">Downloading the data</h2>
+<p>The data set we are using can be downloaded with a single call to <code>get_flights()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>laxflights2022raw <span class="ot">&lt;-</span> <span class="fu">get_flights</span>(<span class="st">"LAX"</span>, <span class="at">year =</span> <span class="dv">2022</span>, <span class="at">months =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To avoid repeated downloads, we save the data set right after we download it. Can be found at <a href="data-raw/laxflights2022raw.csv">data-raw/laxflights2022raw.csv</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(laxflights2022raw, <span class="st">"data-raw/laxflights2022raw.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bad internet connection
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you are having issues with downloading this data all at once then you can split up the download into smaller chuncks like so:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>laxflights1 <span class="ot">&lt;-</span> <span class="fu">anyflights</span>(<span class="st">"LAX"</span>, <span class="dv">2022</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>laxflights2 <span class="ot">&lt;-</span> <span class="fu">anyflights</span>(<span class="st">"LAX"</span>, <span class="dv">2022</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>laxflights2022raw <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  laxflights1<span class="sc">$</span>flights,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  laxflights2<span class="sc">$</span>flights</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="cleaning-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-the-data">Cleaning the data</h2>
+<p>We will do two things to this data set:</p>
+<ul>
+<li>remove redundant variables</li>
+<li>remove variables that won’t be available at prediction time</li>
+</ul>
+<p>When looking at the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 191,156
+Columns: 19
+$ year           &lt;dbl&gt; 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2…
+$ month          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ day            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ dep_time       &lt;dbl&gt; 7, 14, 15, 23, 25, 31, 34, 109, 119, 122, 135, 139, 224…
+$ sched_dep_time &lt;dbl&gt; 2359, 2343, 2315, 30, 2259, 2312, 25, 59, 55, 50, 2340,…
+$ dep_delay      &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, …
+$ arr_time       &lt;dbl&gt; 459, 608, 733, 742, 745, 745, 611, 608, 643, 608, 1000,…
+$ sched_arr_time &lt;dbl&gt; 511, 540, 647, 820, 631, 636, 631, 615, 633, 552, 811, …
+$ arr_delay      &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 12…
+$ carrier        &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "…
+$ flight         &lt;dbl&gt; 468, 359, 44, 177, 185, 205, 600, 122, 317, 33, 276, 59…
+$ tailnum        &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509…
+$ origin         &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX",…
+$ dest           &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH",…
+$ air_time       &lt;dbl&gt; 153, 203, 234, 238, 240, 231, 187, 160, 177, 143, 298, …
+$ distance       &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1…
+$ hour           &lt;dbl&gt; 23, 23, 23, 0, 22, 23, 0, 0, 0, 0, 23, 1, 23, 5, 5, 5, …
+$ minute         &lt;dbl&gt; 59, 43, 15, 30, 59, 12, 25, 59, 55, 50, 40, 30, 32, 10,…
+$ time_hour      &lt;dttm&gt; 2022-01-01 23:00:00, 2022-01-01 23:00:00, 2022-01-01 2…</code></pre>
+</div>
+</div>
+<p>the first thing we notice is that <code>time_hour</code> encodes almost the same information as <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code> and <code>minute</code>. With <code>minute</code> being the only difference. Let us deal with this by adding the minutes to <code>time_hour</code> and only keeping that variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022raw <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> time_hour <span class="sc">+</span> <span class="fu">minutes</span>(minute)) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(year, month, day, hour, minute, time_hour))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 191,156
+Columns: 14
+$ dep_time       &lt;dbl&gt; 7, 14, 15, 23, 25, 31, 34, 109, 119, 122, 135, 139, 224…
+$ sched_dep_time &lt;dbl&gt; 2359, 2343, 2315, 30, 2259, 2312, 25, 59, 55, 50, 2340,…
+$ dep_delay      &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, …
+$ arr_time       &lt;dbl&gt; 459, 608, 733, 742, 745, 745, 611, 608, 643, 608, 1000,…
+$ sched_arr_time &lt;dbl&gt; 511, 540, 647, 820, 631, 636, 631, 615, 633, 552, 811, …
+$ arr_delay      &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 12…
+$ carrier        &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "…
+$ flight         &lt;dbl&gt; 468, 359, 44, 177, 185, 205, 600, 122, 317, 33, 276, 59…
+$ tailnum        &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509…
+$ origin         &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX",…
+$ dest           &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH",…
+$ air_time       &lt;dbl&gt; 153, 203, 234, 238, 240, 231, 187, 160, 177, 143, 298, …
+$ distance       &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1…
+$ time           &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 2…</code></pre>
+</div>
+</div>
+<p>Next, we see that the combination of <code>dep_time</code>, <code>sched_dep_time</code> and <code>dep_delay</code> is linearly dependent as <code>dep_time - sched_dep_time = dep_delay</code>, so we can remove <code>sched_dep_time</code> and <code>dep_time</code> without losing any information since we also have <code>sched_dep_time</code> as a function of <code>time</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(sched_dep_time, dep_time))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 191,156
+Columns: 12
+$ dep_delay      &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, …
+$ arr_time       &lt;dbl&gt; 459, 608, 733, 742, 745, 745, 611, 608, 643, 608, 1000,…
+$ sched_arr_time &lt;dbl&gt; 511, 540, 647, 820, 631, 636, 631, 615, 633, 552, 811, …
+$ arr_delay      &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 12…
+$ carrier        &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "…
+$ flight         &lt;dbl&gt; 468, 359, 44, 177, 185, 205, 600, 122, 317, 33, 276, 59…
+$ tailnum        &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509…
+$ origin         &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX",…
+$ dest           &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH",…
+$ air_time       &lt;dbl&gt; 153, 203, 234, 238, 240, 231, 187, 160, 177, 143, 298, …
+$ distance       &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1…
+$ time           &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 2…</code></pre>
+</div>
+</div>
+<p>On a similar note, since we are trying to predict <code>arr_delay</code>, we can’t have <code>arr_time</code> or <code>air_time</code> in the data set as they allow us to figure out <code>arr_delay</code> from <code>dep_time</code>. With some loss of information, we will also remove <code>sched_arr_time</code> to make the modeling a little easier.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(arr_time, air_time, sched_arr_time))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 191,156
+Columns: 9
+$ dep_delay &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, 16, -…
+$ arr_delay &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 122, -1…
+$ carrier   &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "NK", …
+$ flight    &lt;dbl&gt; 468, 359, 44, 177, 185, 205, 600, 122, 317, 33, 276, 595, 51…
+$ tailnum   &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509NK", …
+$ origin    &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX…
+$ dest      &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH", "MSP…
+$ distance  &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1235, …
+$ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…</code></pre>
+</div>
+</div>
+<p>We will also be removing the <code>flight</code> variable to have one less high cardionality variable to work with.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>flight)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 191,156
+Columns: 8
+$ dep_delay &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, 16, -…
+$ arr_delay &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 122, -1…
+$ carrier   &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "NK", …
+$ tailnum   &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509NK", …
+$ origin    &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX…
+$ dest      &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH", "MSP…
+$ distance  &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1235, …
+$ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…</code></pre>
+</div>
+</div>
+<p>Since we are trying to model <code>arr_delay</code> we exclude all the flights where that information is missing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(arr_delay)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 187,868
+Columns: 8
+$ dep_delay &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, 16, -…
+$ arr_delay &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 122, -1…
+$ carrier   &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "NK", …
+$ tailnum   &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509NK", …
+$ origin    &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX…
+$ dest      &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH", "MSP…
+$ distance  &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1235, …
+$ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…</code></pre>
+</div>
+</div>
+<p>Lastly, the outcome <code>arr_delay</code> has been moved to the beginning of the data set as it aids in investigating the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(arr_delay)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(laxflights2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 187,868
+Columns: 8
+$ arr_delay &lt;dbl&gt; -12, 28, 46, -38, 74, 69, -20, -7, 10, 16, 109, -12, 122, -1…
+$ dep_delay &lt;dbl&gt; 8, 31, 60, -7, 86, 79, 9, 10, 24, 32, 115, 9, 172, -2, 16, -…
+$ carrier   &lt;chr&gt; "UA", "AA", "NK", "AA", "NK", "NK", "UA", "NK", "DL", "NK", …
+$ tailnum   &lt;chr&gt; "N57864", "N919NN", "N949NK", "N812AA", "N903NK", "N509NK", …
+$ origin    &lt;chr&gt; "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX", "LAX…
+$ dest      &lt;chr&gt; "IAH", "BNA", "CLE", "PHL", "PIT", "DTW", "ORD", "IAH", "MSP…
+$ distance  &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 1235, …
+$ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…</code></pre>
+</div>
+</div>
+</section>
+<section id="saving-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="saving-the-data">Saving the data</h2>
+<p>The full data set is now ready and is saved as <a href="data/laxflights2022.csv">data/laxflights2022.csv</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(laxflights2022, <span class="st">"data/laxflights2022.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="data-dictionary">Data dictionary</h2>
+<ul>
+<li><code>arr_delay</code>: Arrival delays, in minutes. Negative times represent early arrivals.</li>
+<li><code>dep_delay</code>: Departure delays, in minutes. Negative times represent early departures.</li>
+<li><code>carrier</code>: Two letter carrier abbreviation.</li>
+<li><code>tailnum</code>: Plane tail number.</li>
+<li><code>origin</code>: FAA airport code for origin of flight.</li>
+<li><code>dest</code>: FAA airport code for destination of flght.</li>
+<li><code>distance</code>: Distance between airports, in miles.</li>
+<li><code>time</code>: Scheduled time of the flight as a POSIXct date, rounded to the nearest minute.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          console.log(htmlDoc.body.innerHTML);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
