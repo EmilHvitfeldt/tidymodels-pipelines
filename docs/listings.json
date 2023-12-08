@@ -2,7 +2,8 @@
   {
     "listing": "/pipelines.html",
     "items": [
-      "/pipelines/standard/index.html"
+      "/pipelines/standard/index.html",
+      "/pipelines/vetiver-docker/index.html"
     ]
   }
 ]

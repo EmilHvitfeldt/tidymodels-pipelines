@@ -1,0 +1,177 @@
+---
+title: Vetiver and Docker
+description: "Using vetiver to build a Docker container"
+categories:
+  - csv
+  - vetiver
+  - docker
+eval: false
+---
+
+::: new
+::: {.callout-note}
+## Changes from standard
+
+All changes from the [standard pipeline](../standard/index.qmd) is highlighted with a cranberry line to the right.
+:::
+:::
+
+## Loading packages
+
+We are using the tidymodels package to do the modeling and [embed](https://embed.tidymodels.org/) for target encoding.
+
+```{r}
+#| label: setup
+library(tidymodels)
+library(embed)
+```
+
+::: new
+
+## Loading Data
+
+We are using the standard `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+
+```{r}
+#| label: loading-data
+#| message: false
+flights <- readr::read_csv(here::here("data/laxflights2022.csv"))
+
+glimpse(flights)
+```
+
+downsampling for speed for now.
+
+```{r}
+flights <- slice_sample(flights, prop = 0.2) %>%
+  arrange(time)
+```
+```{r}
+
+```
+
+:::
+
+## Modeling
+
+As a reminder, the modeling task we are trying to accomplish is the following:
+
+> Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay `arr_delay`.
+
+Our outcome is `arr_delay` and the remaining variables are predictors. We will be fitting a xgboost model as a regression model.
+
+### Splitting Data
+
+Since the data set is already in chronological order, we can create a time split of the data using `initial_time_split()`, this will put the first 75% of the data into the training data set, and the remaining 25% into the testing data set. 
+
+```{r}
+#| label: flights_split
+set.seed(1234)
+
+flights_split <- initial_time_split(flights, prop = 3/4)
+flights_training <- training(flights_split)
+```
+
+Since we are doing hyperparameter tuning, we will also be creating a cross-validation split
+
+```{r}
+#| label: flights_folds
+flights_folds <- vfold_cv(flights_training)
+```
+
+### Feature Engineering
+
+We need to do a couple of things to make this data set work for our model. The datetime variable `time` needs to be transformed, as does the categorical variables `carrier`, `tailnum`, `origin` and `dest`.
+
+From the `time` variable, the month and day of the week are extracted as categorical variables, then the day of year and time of day are extracted as numerics. The `origin` and `dest` variables will be turned into dummy variables, and `carrier`, `tailnum`, `time_month`, and `time_dow` will be converted to numerics with likelihood encoding.
+
+```{r}
+flights_rec <- recipe(arr_delay ~ ., data = flights_training) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_other(origin, dest, threshold = 0.025) %>%
+  step_dummy(origin, dest) %>%
+  step_date(time, 
+            features = c("month", "dow", "doy"), 
+            label = TRUE, 
+            keep_original_cols = TRUE) %>%
+  step_time(time, features = "decimal_day", keep_original_cols = FALSE) %>%
+  step_lencode_mixed(all_nominal_predictors(), outcome = vars(arr_delay)) %>%
+  step_zv(all_predictors())
+```
+
+### Specifying Models
+
+We will be fitting a boosted tree model in the form of a [xgboost model](https://parsnip.tidymodels.org/reference/details_boost_tree_xgboost.html).
+
+```{r}
+xgb_spec <-
+  boost_tree(
+    trees = tune(),
+    min_n = tune(),
+    mtry = tune(),
+    learn_rate = 0.01
+  ) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+
+```
+
+```{r}
+xgb_wf <- workflow(flights_rec, xgb_spec)
+```
+
+
+### Hyperparameter Tuning
+
+```{r}
+doParallel::registerDoParallel()
+
+xgb_rs <- tune_grid(
+  xgb_wf,
+  resamples = flights_folds,
+  grid = 10
+)
+```
+
+We can visualize the performance of the different hyperparameter selections
+
+```{r}
+autoplot(xgb_rs)
+```
+
+and look at the top result
+
+```{r}
+show_best(xgb_rs, metric = "rmse")
+```
+
+### Fitting Final Model
+
+Once we are satisfied with the modeling that has been done, we can fit our final model. We use `finalize_workflow()` to use the best hyperparameters, and `last_fit()` to fit the model to the training data set and evaluate it on the testing data set.
+
+```{r}
+xgb_last <- xgb_wf %>%
+  finalize_workflow(select_best(xgb_rs, "rmse")) %>%
+  last_fit(flights_split)
+```
+
+## Results
+
+Once we have the final model, we can do all kind of analyses. Below we have a truth version prediction plot to showcase how well our model works
+
+```{r}
+#| fig-cap: |
+#|   Truth against prediction plot. The model has a hard time with overly long 
+#|   delays. 
+#| fig-alt: |
+#|   Scatter chart. `arr_delay` along the x-axis and `.pred` along the y-axis.
+#|   A blue line is going diagonally with intercept 0 and slope 1. Most of the
+#|   points lie closely towards the line except for a handful of points with 
+#|   very right delay values.
+xgb_last %>%
+  augment() %>%
+  ggplot(aes(arr_delay, .pred)) +
+  geom_abline(intercept = 0, slope = 1, color = "blue") +
+  geom_point(alpha = 0.25) +
+  theme_minimal()
+```
