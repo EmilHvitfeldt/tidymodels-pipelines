@@ -48,3 +48,47 @@ the following format:
 CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 CONNECT_SERVER=https://example.com/
 ```
+
+### Setting up Amazon S3
+
+For the smoothest experience, we recommend that you authenticate using
+environment variables. The two variables you will need are
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+
+<div class="callout-warning">
+
+Depending on your S3 setup, you will need to use additional variables to
+connect. Please see
+<https://github.com/paws-r/paws/blob/main/docs/credentials.md> and this
+[pins issue](https://github.com/rstudio/pins-r/issues/608) for help if
+the following paragraphs doesn’t work for you.
+
+</div>
+
+<div class="callout-tip">
+
+The function
+[usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html)
+can be very handy to open `.Renviron` file to specify your environment
+variables.
+
+</div>
+
+You can find both of these keys in the same location.
+
+1.  Open the [AWS Console](https://console.aws.amazon.com/)
+2.  Click on your username near the top right and select
+    `Security Credentials`
+3.  Click on `Users` in the sidebar
+4.  Click on your username
+5.  Click on the `Security Credentials` tab
+6.  Click `Create Access Key`
+7.  Click `Show User Security Credentials`
+
+Once you have those two, you can add them to your `.Renviron` file in
+the following format:
+
+``` markdown
+AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
