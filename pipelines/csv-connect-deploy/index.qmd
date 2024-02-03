@@ -1,0 +1,257 @@
+---
+title: Vetiver and Posit Connect
+description: "Using vetiver to version a model on Posit Connect as an endpoint, and predict from it"
+categories:
+  - csv
+  - vetiver
+  - Docker
+  - Posit Connect
+---
+
+::: new
+::: {.callout-note}
+## Changes from standard
+
+All changes from the [standard pipeline](../standard/index.qmd) is highlighted with a cranberry line to the right.
+:::
+:::
+
+::: new
+
+## Loading packages
+
+We are using the tidymodels package to do the modeling, [embed](https://embed.tidymodels.org/) for target encoding, [pins](https://pins.rstudio.com/) for versioning,  [vetiver](https://vetiver.rstudio.com/) for version and deployment, and [rsconnect](https://rstudio.github.io/rsconnect/) for connecting with [Posit Connect](https://posit.co/products/enterprise/connect/).
+
+```{r}
+#| label: setup
+#| message: false
+# install.packages("pak")
+# pak::pak("tidymodels", "embed", "vetiver", "pins", "rsconnect")
+library(tidymodels)
+library(embed)
+library(vetiver)
+library(pins)
+library(rsconnect)
+```
+
+:::
+
+## Loading Data
+
+We are using the standard `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+
+```{r}
+#| label: loading-data
+#| message: false
+flights <- readr::read_csv(here::here("data/laxflights2022.csv"))
+
+glimpse(flights)
+```
+
+downsampling for speed for now.
+
+```{r}
+flights <- slice_sample(flights, prop = 0.02) %>%
+  arrange(time)
+```
+
+## Modeling
+
+As a reminder, the modeling task we are trying to accomplish is the following:
+
+> Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay `arr_delay`.
+
+Our outcome is `arr_delay` and the remaining variables are predictors. We will be fitting a xgboost model as a regression model.
+
+### Splitting Data
+
+Since the data set is already in chronological order, we can create a time split of the data using `initial_time_split()`, this will put the first 75% of the data into the training data set, and the remaining 25% into the testing data set. 
+
+```{r}
+#| label: flights_split
+set.seed(1234)
+
+flights_split <- initial_time_split(flights, prop = 3/4)
+flights_training <- training(flights_split)
+```
+
+Since we are doing hyperparameter tuning, we will also be creating a cross-validation split
+
+```{r}
+#| label: flights_folds
+flights_folds <- vfold_cv(flights_training)
+```
+
+### Feature Engineering
+
+We need to do a couple of things to make this data set work for our model. The datetime variable `time` needs to be transformed, as does the categorical variables `carrier`, `tailnum`, `origin` and `dest`.
+
+From the `time` variable, the month and day of the week are extracted as categorical variables, then the day of year and time of day are extracted as numerics. The `origin` and `dest` variables will be turned into dummy variables, and `carrier`, `tailnum`, `time_month`, and `time_dow` will be converted to numerics with likelihood encoding.
+
+```{r}
+flights_rec <- recipe(arr_delay ~ ., data = flights_training) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_other(origin, dest, threshold = 0.025) %>%
+  step_dummy(origin, dest) %>%
+  step_date(time, 
+            features = c("month", "dow", "doy"), 
+            label = TRUE, 
+            keep_original_cols = TRUE) %>%
+  step_time(time, features = "decimal_day", keep_original_cols = FALSE) %>%
+  step_lencode_mixed(all_nominal_predictors(), outcome = vars(arr_delay)) %>%
+  step_zv(all_predictors())
+```
+
+### Specifying Models
+
+We will be fitting a boosted tree model in the form of a [xgboost model](https://parsnip.tidymodels.org/reference/details_boost_tree_xgboost.html).
+
+```{r}
+xgb_spec <-
+  boost_tree(
+    trees = tune(),
+    min_n = tune(),
+    mtry = tune(),
+    learn_rate = 0.01
+  ) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+
+```
+
+```{r}
+xgb_wf <- workflow(flights_rec, xgb_spec)
+```
+
+
+### Hyperparameter Tuning
+
+```{r}
+doParallel::registerDoParallel()
+
+xgb_rs <- tune_grid(
+  xgb_wf,
+  resamples = flights_folds,
+  grid = 10
+)
+```
+
+We can visualize the performance of the different hyperparameter selections
+
+```{r}
+autoplot(xgb_rs)
+```
+
+and look at the top result
+
+```{r}
+show_best(xgb_rs, metric = "rmse")
+```
+
+### Fitting Final Model
+
+Once we are satisfied with the modeling that has been done, we can fit our final model. We use `finalize_workflow()` to use the best hyperparameters, and `last_fit()` to fit the model to the training data set and evaluate it on the testing data set.
+
+```{r}
+xgb_last <- xgb_wf %>%
+  finalize_workflow(select_best(xgb_rs, "rmse")) %>%
+  last_fit(flights_split)
+```
+
+::: new
+
+## Creating vetiver model
+
+```{r}
+v <- xgb_last %>%
+  extract_workflow() %>%
+  vetiver_model("flights_xgb")
+v
+```
+
+## Version model with pins on Posit Connect
+
+We will version this model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
+
+For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.
+
+::: {.callout-tip}
+The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
+:::
+
+`CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.
+
+`CONNECT_API_KEY` is created through your Connect server. 
+1. Click on your name in the upper right upper right.
+1. Click `API keys`.
+1. Click `New API Key`.
+1. Give your API a key, click ``Create Key`.
+
+Once you have those two, you can add them to your `.Renviron` file in the following format:
+
+```markdown
+CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CONNECT_SERVER=https://example.com/
+```
+
+Note that you don't want to put quotes around the values. Once that is all done, we can create a board that connects to Connect, and write our vetiver model to the board.
+
+```{r}
+#| message: false
+board <- board_connect()
+vetiver_pin_write(board, v)
+```
+
+Since we are using `vetiver_deploy_rsconnect()` which uses the {rsconnect} package, we need to make sure that we have the right authetication and settings. We can do this using `rsconnect::connectApiUser()`.
+
+```markdown
+rsconnect::connectApiUser(
+  account = "account.name",
+  server = "https://example.com/", 
+  apiKey = "...."
+)
+```
+
+You will notice that we already have these values, as we got them earlier when we set up the environment variables.
+
+
+Once we are properly set up, we can use `vetiver_deploy_rsconnect()`, it takes a `board` and the name of endpoint. Depending on your model, it will take a little while to run as it installs what it needs.
+
+```{r}
+#| eval: false
+endpoint <- vetiver_deploy_rsconnect(
+  board = board, 
+  name = "emil.hvitfeldt/flights_xgb"
+)
+```
+
+Once this finishes running, you might get a pop-up website with your endpoint information. It should also print to the console. You can also find it in Connect itself. What we need is the "CONTENT URL".
+
+## Make predictions from Connect endpoint
+
+Now that we have the content url we can create an endpoint with `vetiver_endpoint()`, and that endpoint can be used as a way to make predictions. The content url we got earlier should replace `$APP_ID` below. Note that it is very important that we end the endpoint with `/predict`.
+
+```{r}
+#| eval: false
+endpoint <- vetiver_endpoint("https://colorado.posit.co/rsc/content/$APP_ID/predict")
+```
+
+And now we are ready to predict! With the endpoint we can pass in some data set to predict with. Authorization is done in a header that uses the `CONNECT_API_KEY` environment variable we created earlier.
+
+```{r}
+#| eval: false
+predict(
+  endpoint,
+  flights_training,
+  httr::add_headers(Authorization = paste("Key", Sys.getenv("CONNECT_API_KEY")))
+)
+```
+
+```{r}
+#| echo: false
+tibble::tibble(
+  .pred = c(-1.7894, -13.3206, -17.2753, -3.6661, 82.8237, 52.177, 10.7185, 8.0357, 58.146, 5.3933, rep(0, 2807)),
+)
+```
+
+:::
