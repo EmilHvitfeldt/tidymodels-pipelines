@@ -11,6 +11,8 @@ We are using the tidymodels package to do the modeling and [embed](https://embed
 
 ```{r}
 #| label: setup
+# install.packages("pak")
+# pak::pak("tidymodels", "embed")
 library(tidymodels)
 library(embed)
 ```
