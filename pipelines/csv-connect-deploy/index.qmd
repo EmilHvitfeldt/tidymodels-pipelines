@@ -4,7 +4,6 @@ description: "Using vetiver to version a model on Posit Connect as an endpoint, 
 categories:
   - csv
   - vetiver
-  - Docker
   - Posit Connect
 ---
 
