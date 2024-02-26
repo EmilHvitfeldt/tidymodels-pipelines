@@ -5,7 +5,7 @@ library(plumber)
 library(rapidoc)
 library(vetiver)
 b <- board_s3(bucket = "tidymodels-pipeline-example", region = structure("us-west-1", tags = list(type = "scalar")))
-v <- vetiver_pin_read(b, "flights_xgb", version = "20240226T233634Z-c50ac")
+v <- vetiver_pin_read(b, "flights_xgb", version = "20240226T234318Z-ed0ea")
 
 #* @plumber
 function(pr) {

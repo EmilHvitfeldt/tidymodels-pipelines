@@ -1,6 +1,7 @@
 ---
 title: Vetiver, Posit Connect, and Docker
 description: "Using vetiver to version a model on Posit Connect, and predict with it from a Docker container"
+image: ../../images/csv-connect-docker.jpg
 categories:
   - csv
   - vetiver

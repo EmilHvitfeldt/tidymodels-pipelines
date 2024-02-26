@@ -1,6 +1,7 @@
 ---
 title: Vetiver and Posit Connect
 description: "Using vetiver to version a model on Posit Connect as an endpoint, and predict from it"
+image: ../../images/csv-connect-deploy.jpg
 categories:
   - csv
   - vetiver

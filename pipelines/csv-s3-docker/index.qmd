@@ -1,6 +1,7 @@
 ---
 title: Vetiver, S3, and Docker
 description: "Using vetiver to version a model in a S3 bucket, and predict with it from a Docker container"
+image: ../../images/csv-s3-docker.jpg
 categories:
   - csv
   - vetiver

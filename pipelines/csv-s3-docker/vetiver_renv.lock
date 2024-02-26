@@ -1474,15 +1474,9 @@
     },
     "recipes": {
       "Package": "recipes",
-      "Version": "1.0.10.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "recipes",
-      "RemoteUsername": "tidymodels",
-      "RemotePkgRef": "tidymodels/recipes",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "7858c1e2300dddc0f6cc068162384b276dca9295",
+      "Version": "1.0.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "Matrix",
         "R",
@@ -1509,7 +1503,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "a8e8baa31c2d5265eadf1c8233f4f879"
+      "Hash": "69783cdd607c58fffb21c5c26c6ededf"
     },
     "rematch2": {
       "Package": "rematch2",

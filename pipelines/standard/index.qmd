@@ -1,6 +1,7 @@
 ---
 title: Standard Modeling Pipeline
 description: "This analysis is done using tidymodels R alone"
+image: ../../images/standard.jpg
 categories:
   - csv
 ---
