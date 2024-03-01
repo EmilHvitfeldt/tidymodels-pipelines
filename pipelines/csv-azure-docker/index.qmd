@@ -1,0 +1,270 @@
+---
+title: Vetiver, Azure, and Docker
+description: "Using vetiver to version a model in a Azure Storage Container, and predict with it from a Docker container"
+image: ../../images/csv-azure-deploy.jpg
+categories:
+  - csv
+  - vetiver
+  - Docker
+  - Azure
+---
+
+::: new
+::: {.callout-note}
+## Changes from standard
+
+All changes from the [standard pipeline](../standard/index.qmd) is highlighted with a cranberry line to the right.
+:::
+:::
+
+::: new
+
+## Loading packages
+
+We are using the tidymodels package to do the modeling, [embed](https://embed.tidymodels.org/) for target encoding, [pins](https://pins.rstudio.com/) for versioning,  [vetiver](https://vetiver.rstudio.com/) for version and deployment, and [AzureStor](https://cran.r-project.org/web/packages/AzureStor/index.html) for connecting with Azure Storage.
+
+```{r}
+#| label: setup
+#| message: false
+library(tidymodels)
+library(embed)
+library(vetiver)
+library(pins)
+library(AzureStor)
+```
+
+:::
+
+## Loading Data
+
+We are using the standard `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+
+```{r}
+#| label: loading-data
+#| message: false
+flights <- readr::read_csv(here::here("data/laxflights2022.csv"))
+
+glimpse(flights)
+```
+
+downsampling for speed for now.
+
+```{r}
+flights <- slice_sample(flights, prop = 0.02) %>%
+  arrange(time)
+```
+
+## Modeling
+
+As a reminder, the modeling task we are trying to accomplish is the following:
+
+> Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay `arr_delay`.
+
+Our outcome is `arr_delay` and the remaining variables are predictors. We will be fitting a xgboost model as a regression model.
+
+### Splitting Data
+
+Since the data set is already in chronological order, we can create a time split of the data using `initial_time_split()`, this will put the first 75% of the data into the training data set, and the remaining 25% into the testing data set. 
+
+```{r}
+#| label: flights_split
+set.seed(1234)
+
+flights_split <- initial_time_split(flights, prop = 3/4)
+flights_training <- training(flights_split)
+```
+
+Since we are doing hyperparameter tuning, we will also be creating a cross-validation split
+
+```{r}
+#| label: flights_folds
+flights_folds <- vfold_cv(flights_training)
+```
+
+### Feature Engineering
+
+We need to do a couple of things to make this data set work for our model. The datetime variable `time` needs to be transformed, as does the categorical variables `carrier`, `tailnum`, `origin` and `dest`.
+
+From the `time` variable, the month and day of the week are extracted as categorical variables, then the day of year and time of day are extracted as numerics. The `origin` and `dest` variables will be turned into dummy variables, and `carrier`, `tailnum`, `time_month`, and `time_dow` will be converted to numerics with likelihood encoding.
+
+```{r}
+flights_rec <- recipe(arr_delay ~ ., data = flights_training) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_other(origin, dest, threshold = 0.025) %>%
+  step_dummy(origin, dest) %>%
+  step_date(time, 
+            features = c("month", "dow", "doy"), 
+            label = TRUE, 
+            keep_original_cols = TRUE) %>%
+  step_time(time, features = "decimal_day", keep_original_cols = FALSE) %>%
+  step_lencode_mixed(all_nominal_predictors(), outcome = vars(arr_delay)) %>%
+  step_zv(all_predictors())
+```
+
+### Specifying Models
+
+We will be fitting a boosted tree model in the form of a [xgboost model](https://parsnip.tidymodels.org/reference/details_boost_tree_xgboost.html).
+
+```{r}
+xgb_spec <-
+  boost_tree(
+    trees = tune(),
+    min_n = tune(),
+    mtry = tune(),
+    learn_rate = 0.01
+  ) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+
+```
+
+```{r}
+xgb_wf <- workflow(flights_rec, xgb_spec)
+```
+
+
+### Hyperparameter Tuning
+
+```{r}
+doParallel::registerDoParallel()
+
+xgb_rs <- tune_grid(
+  xgb_wf,
+  resamples = flights_folds,
+  grid = 10
+)
+```
+
+We can visualize the performance of the different hyperparameter selections
+
+```{r}
+autoplot(xgb_rs)
+```
+
+and look at the top result
+
+```{r}
+show_best(xgb_rs, metric = "rmse")
+```
+
+### Fitting Final Model
+
+Once we are satisfied with the modeling that has been done, we can fit our final model. We use `finalize_workflow()` to use the best hyperparameters, and `last_fit()` to fit the model to the training data set and evaluate it on the testing data set.
+
+```{r}
+xgb_last <- xgb_wf %>%
+  finalize_workflow(select_best(xgb_rs, "rmse")) %>%
+  last_fit(flights_split)
+```
+
+::: new
+
+## Creating vetiver model
+
+```{r}
+v <- xgb_last %>%
+  extract_workflow() %>%
+  vetiver_model("flights_xgb")
+v
+```
+
+## Version model with pins on Azure
+
+We will version this model on [Azure](https://portal.azure.com/#home) using the [pins](https://pins.rstudio.com/) package.
+
+For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `AZURE_CONTAINER_ENDPOINT` and `AZURE_SAS_KEY`.
+
+::: {.callout-tip}
+The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
+:::
+
+First we need to create a Azure container for us to point to. You can find out how to create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?view=doc-intel-4.0.0&tabs=azure-portal) and how to [create a container](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal?view=doc-intel-4.0.0#create-a-container) from the official documentation. Furthermore, [generating a SAS key](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/create-sas-tokens?view=doc-intel-4.0.0) should be done as well.
+
+Once you have those two, you can add them to your `.Renviron` file in the following format:
+
+```markdown
+AZURE_CONTAINER_ENDPOINT=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AZURE_SAS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+The container endpoint will have the following format `https://name-of-storage-account.blob.core.windows.net/name-of-container`.
+
+Once that is all done, we can create a board that connects to Azure, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board.
+
+```{r}
+#| message: false
+container <-
+  storage_container(
+    endpoint = Sys.getenv("AZURE_CONTAINER_ENDPOINT"),
+    sas = Sys.getenv("AZURE_SAS_KEY")
+  )
+
+board <- board_azure(container)
+
+vetiver_pin_write(board, v)
+```
+
+## Create Docker artifacts
+
+To build a Docker image that can serve your model, you need three artifacts:
+
+- the Dockerfile itself,
+- a `renv.lock` to capture your model dependencies, and
+- an `plumber.R` file containing the information to serve a vetiver REST API.
+
+You can create all the needed files with one function.
+
+```{r}
+#| message: false
+vetiver_prepare_docker(
+  board, 
+  "flights_xgb", 
+  docker_args = list(port = 8080)
+)
+```
+
+::: {.callout-note}
+Keep an eye on the value of `port`, we want to make sure we use the same throughout the whole pipeline.
+:::
+
+For ease of use, we make sure only to have CRAN versions of packages.
+
+## Build and run your Dockerfile
+
+Now that we have everything we need to build a Docker image. We have one more thing to do. Install [Docker](https://www.docker.com/get-started/) if you haven't already, then launch it so we can interact with it from the [command line](https://docs.docker.com/engine/reference/commandline/cli/) (not from R). Use the following [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. Notice that we can give it a "name" using the `--tag` flag. The `.` here denotes the path to the build context. Which in this example is the folder we are in.
+
+```bash
+docker build --tag flights .
+```
+
+::: {.callout-tip}
+If you are on an ARM architecture locally and deploying an R model, use `--platform linux/amd64` for RSPM’s fast installation of R package binaries.
+:::
+
+To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific `.Renviron` file. (`fs::file_touch(".Renviron")`) and specifying `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in that file.
+
+Then we run [docker run](https://docs.docker.com/engine/reference/commandline/run/) command. We set 2 flags, `--env-file` to pass in the environment variables we need, and `--publish` to specify the port.
+
+```bash
+docker run --env-file .Renviron --publish 8080:8080 flights
+```
+
+## Make predictions from Docker container
+
+Now that the docker container is running we can create an endpoint with `vetiver_endpoint()`, and that endpoint can be used as a way to make predictions.
+
+```{r}
+#| eval: false
+endpoint <- vetiver_endpoint("http://0.0.0.0:8080/predict")
+
+predict(endpoint, flights_training)
+```
+
+```{r}
+#| echo: false
+tibble::tibble(
+  .pred = c(-1.7894, -13.3206, -17.2753, -3.6661, 82.8237, 52.177, 10.7185, 8.0357, 58.146, 5.3933, rep(0, 2807)),
+)
+```
+
+:::
