@@ -1,6 +1,7 @@
 ---
 title: Vetiver, Posit Connect, and Docker
 description: "Using vetiver to version a model on Posit Connect, and predict with it from a Docker container"
+image: ../../images/csv-connect-docker.jpg
 categories:
   - csv
   - vetiver
@@ -25,6 +26,8 @@ We are using the tidymodels package to do the modeling, [embed](https://embed.ti
 ```{r}
 #| label: setup
 #| message: false
+# install.packages("pak")
+# pak::pak("tidymodels", "embed", "vetiver", "pins")
 library(tidymodels)
 library(embed)
 library(vetiver)
