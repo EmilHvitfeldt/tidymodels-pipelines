@@ -9,6 +9,11 @@ categories:
   - Amazon S3
 ---
 
+::: {.callout-note}
+This page was last generated on 2023-12-15. If you find the code out of date please [file an issue](https://github.com/EmilHvitfeldt/tidymodels-pipelines/issues/new).
+:::
+
+
 ::: new
 ::: {.callout-note}
 ## Changes from standard

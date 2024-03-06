@@ -6,6 +6,10 @@ categories:
   - csv
 ---
 
+::: {.callout-note}
+This page was last generated on 2024-03-06. If you find the code out of date please [file an issue](https://github.com/EmilHvitfeldt/tidymodels-pipelines/issues/new).
+:::
+
 ## Loading packages
 
 We are using the tidymodels package to do the modeling and [embed](https://embed.tidymodels.org/) for target encoding.

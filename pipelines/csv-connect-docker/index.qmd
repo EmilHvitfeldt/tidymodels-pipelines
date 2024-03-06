@@ -9,6 +9,10 @@ categories:
   - Posit Connect
 ---
 
+::: {.callout-note}
+This page was last generated on 2024-03-01. If you find the code out of date please [file an issue](https://github.com/EmilHvitfeldt/tidymodels-pipelines/issues/new).
+:::
+
 ::: new
 ::: {.callout-note}
 ## Changes from standard

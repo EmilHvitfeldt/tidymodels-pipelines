@@ -517,10 +517,9 @@
     },
     "embed": {
       "Package": "embed",
-      "Version": "1.1.3.9000",
-      "Source": "Local",
-      "RemotePkgRef": "local::/Users/emilhvitfeldt/Github/embed",
-      "RemoteType": "local",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "dplyr",
@@ -541,7 +540,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "7b99b2def0099b16b8fc9dc7b6313c8f"
+      "Hash": "d8792e751c8d6be84228ed6b9f0a56b2"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -1188,14 +1187,9 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.9.0.9005",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "pillar",
-      "RemoteUsername": "r-lib",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "1ea4b11f0f9b037f6196c70d18081f4ec10797d6",
+      "Version": "1.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "cli",
         "fansi",
@@ -1206,7 +1200,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "34bcd5fb422366898709a2aa792fa814"
+      "Hash": "15da5a8412f317beeee6175fbc76f4bb"
     },
     "pins": {
       "Package": "pins",
