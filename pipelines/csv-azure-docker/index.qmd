@@ -10,7 +10,7 @@ categories:
 ---
 
 ::: {.callout-note}
-This page was last generated on 2024-03-01. If you find the code out of date please [file an issue](https://github.com/EmilHvitfeldt/tidymodels-pipelines/issues/new).
+This page was last generated on 2024-03-08. If you find the code out of date please [file an issue](https://github.com/EmilHvitfeldt/tidymodels-pipelines/issues/new).
 :::
 
 ::: new
@@ -41,21 +41,14 @@ library(AzureStor)
 
 ## Loading Data
 
-We are using the standard `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+We are using the smaller `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
 
 ```{r}
 #| label: loading-data
 #| message: false
-flights <- readr::read_csv(here::here("data/laxflights2022.csv"))
+flights <- readr::read_csv(here::here("data/laxflights2022_lite.csv"))
 
 glimpse(flights)
-```
-
-downsampling for speed for now.
-
-```{r}
-flights <- slice_sample(flights, prop = 0.02) %>%
-  arrange(time)
 ```
 
 ## Modeling
