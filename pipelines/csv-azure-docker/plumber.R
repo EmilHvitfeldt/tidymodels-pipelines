@@ -5,7 +5,7 @@ library(plumber)
 library(rapidoc)
 library(vetiver)
 c("b <- board_azure(AzureStor::storage_container(", "b <-   \"https://tidymodelspipelines.blob.core.windows.net/example\"), path = \"\")")
-v <- vetiver_pin_read(b, "flights_xgb", version = "20240308T213935Z-0b553")
+v <- vetiver_pin_read(b, "flights_xgb", version = "20240308T220155Z-0b553")
 
 #* @plumber
 function(pr) {

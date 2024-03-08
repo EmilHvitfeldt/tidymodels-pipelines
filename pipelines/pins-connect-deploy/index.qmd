@@ -1,12 +1,11 @@
 ---
-title: Vetiver, Azure, and Docker
-description: "Using vetiver to version a model in a Azure Storage Container, and predict with it from a Docker container"
-image: ../../images/csv-azure-docker.jpg
+title: Vetiver and Posit Connect
+description: "Using vetiver to version a model on Posit Connect as an endpoint, and predict from it"
+image: ../../images/csv-connect-deploy.jpg
 categories:
   - csv
   - vetiver
-  - Docker
-  - Azure
+  - Posit Connect
 ---
 
 ::: {.callout-note}
@@ -25,16 +24,18 @@ All changes from the [standard pipeline](../standard/index.qmd) is highlighted w
 
 ## Loading packages
 
-We are using the tidymodels package to do the modeling, [embed](https://embed.tidymodels.org/) for target encoding, [pins](https://pins.rstudio.com/) for versioning,  [vetiver](https://vetiver.rstudio.com/) for version and deployment, and [AzureStor](https://cran.r-project.org/web/packages/AzureStor/index.html) for connecting with Azure Storage.
+We are using the tidymodels package to do the modeling, [embed](https://embed.tidymodels.org/) for target encoding, [pins](https://pins.rstudio.com/) for versioning,  [vetiver](https://vetiver.rstudio.com/) for version and deployment, and [rsconnect](https://rstudio.github.io/rsconnect/) for connecting with [Posit Connect](https://posit.co/products/enterprise/connect/).
 
 ```{r}
 #| label: setup
 #| message: false
+# install.packages("pak")
+# pak::pak("tidymodels", "embed", "vetiver", "pins", "rsconnect")
 library(tidymodels)
 library(embed)
 library(vetiver)
 library(pins)
-library(AzureStor)
+library(rsconnect)
 ```
 
 :::
@@ -165,96 +166,82 @@ v <- xgb_last %>%
 v
 ```
 
-## Version model with pins on Azure
+## Version model with pins on Posit Connect
 
-We will version this model on [Azure](https://portal.azure.com/#home) using the [pins](https://pins.rstudio.com/) package.
+We will version this model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
 
-For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `AZURE_CONTAINER_ENDPOINT` and `AZURE_SAS_KEY`.
+For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.
 
 ::: {.callout-tip}
 The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
 :::
 
-First we need to create a Azure container for us to point to. You can find out how to create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?view=doc-intel-4.0.0&tabs=azure-portal) and how to [create a container](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal?view=doc-intel-4.0.0#create-a-container) from the official documentation. Furthermore, [generating a SAS key](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/create-sas-tokens?view=doc-intel-4.0.0) should be done as well.
+`CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.
+
+`CONNECT_API_KEY` is created through your Connect server. 
+1. Click on your name in the upper right upper right.
+1. Click `API keys`.
+1. Click `New API Key`.
+1. Give your API a key, click ``Create Key`.
 
 Once you have those two, you can add them to your `.Renviron` file in the following format:
 
 ```markdown
-AZURE_CONTAINER_ENDPOINT=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-AZURE_SAS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CONNECT_SERVER=https://example.com/
 ```
 
-The container endpoint will have the following format `https://name-of-storage-account.blob.core.windows.net/name-of-container`.
-
-Once that is all done, we can create a board that connects to Azure, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board.
+Note that you don't want to put quotes around the values. Once that is all done, we can create a board that connects to Connect, and write our vetiver model to the board.
 
 ```{r}
 #| message: false
-container <-
-  storage_container(
-    endpoint = Sys.getenv("AZURE_CONTAINER_ENDPOINT"),
-    sas = Sys.getenv("AZURE_SAS_KEY")
-  )
-
-board <- board_azure(container)
-
+board <- board_connect()
 vetiver_pin_write(board, v)
 ```
 
-## Create Docker artifacts
+Since we are using `vetiver_deploy_rsconnect()` which uses the {rsconnect} package, we need to make sure that we have the right authetication and settings. We can do this using `rsconnect::connectApiUser()`.
 
-To build a Docker image that can serve your model, you need three artifacts:
-
-- the Dockerfile itself,
-- a `renv.lock` to capture your model dependencies, and
-- an `plumber.R` file containing the information to serve a vetiver REST API.
-
-You can create all the needed files with one function.
-
-```{r}
-#| message: false
-vetiver_prepare_docker(
-  board, 
-  "flights_xgb", 
-  docker_args = list(port = 8080)
+```markdown
+rsconnect::connectApiUser(
+  account = "account.name",
+  server = "https://example.com/", 
+  apiKey = "...."
 )
 ```
 
-::: {.callout-note}
-Keep an eye on the value of `port`, we want to make sure we use the same throughout the whole pipeline.
-:::
+You will notice that we already have these values, as we got them earlier when we set up the environment variables.
 
-For ease of use, we make sure only to have CRAN versions of packages.
 
-## Build and run your Dockerfile
-
-Now that we have everything we need to build a Docker image. We have one more thing to do. Install [Docker](https://www.docker.com/get-started/) if you haven't already, then launch it so we can interact with it from the [command line](https://docs.docker.com/engine/reference/commandline/cli/) (not from R). Use the following [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. Notice that we can give it a "name" using the `--tag` flag. The `.` here denotes the path to the build context. Which in this example is the folder we are in.
-
-```bash
-docker build --tag flights .
-```
-
-::: {.callout-tip}
-If you are on an ARM architecture locally and deploying an R model, use `--platform linux/amd64` for RSPM’s fast installation of R package binaries.
-:::
-
-To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific `.Renviron` file. (`fs::file_touch(".Renviron")`) and specifying `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in that file.
-
-Then we run [docker run](https://docs.docker.com/engine/reference/commandline/run/) command. We set 2 flags, `--env-file` to pass in the environment variables we need, and `--publish` to specify the port.
-
-```bash
-docker run --env-file .Renviron --publish 8080:8080 flights
-```
-
-## Make predictions from Docker container
-
-Now that the docker container is running we can create an endpoint with `vetiver_endpoint()`, and that endpoint can be used as a way to make predictions.
+Once we are properly set up, we can use `vetiver_deploy_rsconnect()`, it takes a `board` and the name of endpoint. Depending on your model, it will take a little while to run as it installs what it needs.
 
 ```{r}
 #| eval: false
-endpoint <- vetiver_endpoint("http://0.0.0.0:8080/predict")
+endpoint <- vetiver_deploy_rsconnect(
+  board = board, 
+  name = "emil.hvitfeldt/flights_xgb"
+)
+```
 
-predict(endpoint, flights_training)
+Once this finishes running, you might get a pop-up website with your endpoint information. It should also print to the console. You can also find it in Connect itself. What we need is the "CONTENT URL".
+
+## Make predictions from Connect endpoint
+
+Now that we have the content url we can create an endpoint with `vetiver_endpoint()`, and that endpoint can be used as a way to make predictions. The content url we got earlier should replace `$APP_ID` below. Note that it is very important that we end the endpoint with `/predict`.
+
+```{r}
+#| eval: false
+endpoint <- vetiver_endpoint("https://colorado.posit.co/rsc/content/$APP_ID/predict")
+```
+
+And now we are ready to predict! With the endpoint we can pass in some data set to predict with. Authorization is done in a header that uses the `CONNECT_API_KEY` environment variable we created earlier.
+
+```{r}
+#| eval: false
+predict(
+  endpoint,
+  flights_training,
+  httr::add_headers(Authorization = paste("Key", Sys.getenv("CONNECT_API_KEY")))
+)
 ```
 
 ```{r}
