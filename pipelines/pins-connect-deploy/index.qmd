@@ -1,9 +1,9 @@
 ---
 title: Vetiver and Posit Connect
 description: "Using vetiver to version a model on Posit Connect as an endpoint, and predict from it"
-image: ../../images/csv-connect-deploy.jpg
+image: ../../images/pins-connect-deploy.jpg
 categories:
-  - csv
+  - pins
   - vetiver
   - Posit Connect
 ---
@@ -41,14 +41,45 @@ library(rsconnect)
 :::
 
 ::: new
+
+## Loading data from Posit Connect with pins
+
+We will fetch data from and version the final model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
+
+For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.
+
+::: {.callout-tip}
+The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
+:::
+
+`CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.
+
+`CONNECT_API_KEY` is created through your Connect server. 
+1. Click on your name in the upper right upper right.
+1. Click `API keys`.
+1. Click `New API Key`.
+1. Give your API a key, click ``Create Key`.
+
+Once you have those two, you can add them to your `.Renviron` file in the following format:
+
+```markdown
+CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CONNECT_SERVER=https://example.com/
+```
+
+Note that you don't want to put quotes around the values. 
+
 ## Loading Data
 
-We are using the smaller `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+We are using the smaller `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page. The data set has been uploaded to pins, as described on the [data pins](../../data-pins.qmd) page. This is meant to simulate this workflow where we stay inside Connect as much as possible.
 
 ```{r}
 #| label: loading-data
 #| message: false
-flights <- readr::read_csv(here::here("data/laxflights2022_lite.csv"))
+board <- board_connect()
+
+flights <- board |> 
+  pin_read("emil.hvitfeldt/laxflights2022_lite")
 
 glimpse(flights)
 ```
@@ -171,30 +202,7 @@ v
 
 ## Version model with pins on Posit Connect
 
-We will version this model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
-
-For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.
-
-::: {.callout-tip}
-The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
-:::
-
-`CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.
-
-`CONNECT_API_KEY` is created through your Connect server. 
-1. Click on your name in the upper right upper right.
-1. Click `API keys`.
-1. Click `New API Key`.
-1. Give your API a key, click ``Create Key`.
-
-Once you have those two, you can add them to your `.Renviron` file in the following format:
-
-```markdown
-CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-CONNECT_SERVER=https://example.com/
-```
-
-Note that you don't want to put quotes around the values. Once that is all done, we can create a board that connects to Connect, and write our vetiver model to the board.
+Once that is all done, we can create a board that connects to Connect, and write our vetiver model to the board.
 
 ```{r}
 #| message: false
