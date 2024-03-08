@@ -158,7 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Preperation</h1>
+<h1 class="title">Data Preparation</h1>
 </div>
 
 
@@ -204,7 +204,7 @@ Bad internet connection
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you are having issues with downloading this data all at once then you can split up the download into smaller chuncks like so:</p>
+<p>If you are having issues with downloading this data all at once then you can split up the download into smaller chunks like so:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>laxflights1 <span class="ot">&lt;-</span> <span class="fu">anyflights</span>(<span class="st">"LAX"</span>, <span class="dv">2022</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>laxflights2 <span class="ot">&lt;-</span> <span class="fu">anyflights</span>(<span class="st">"LAX"</span>, <span class="dv">2022</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -221,7 +221,7 @@ Bad internet connection
 <p>We will do two things to this data set:</p>
 <ul>
 <li>remove redundant variables</li>
-<li>remove variables that won’t be available at prediction time</li>
+<li>remove variables that won’t be available at the prediction time</li>
 </ul>
 <p>When looking at the data</p>
 <div class="cell">
@@ -250,7 +250,7 @@ $ minute         &lt;dbl&gt; 59, 43, 15, 30, 59, 12, 25, 59, 55, 50, 40, 30, 32,
 $ time_hour      &lt;dttm&gt; 2022-01-01 23:00:00, 2022-01-01 23:00:00, 2022-01-01 2…</code></pre>
 </div>
 </div>
-<p>the first thing we notice is that <code>time_hour</code> encodes almost the same information as <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code> and <code>minute</code>. With <code>minute</code> being the only difference. Let us deal with this by adding the minutes to <code>time_hour</code> and only keeping that variables</p>
+<p>the first thing we notice is that <code>time_hour</code> encodes almost the same information as <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code> and <code>minute</code>. With <code>minute</code> being the only difference. Let us deal with this by adding the minutes to <code>time_hour</code> and only keeping that variable</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022raw <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> time_hour <span class="sc">+</span> <span class="fu">minutes</span>(minute)) <span class="sc">|&gt;</span></span>
@@ -319,7 +319,7 @@ $ distance  &lt;dbl&gt; 1379, 1797, 2052, 2402, 2136, 1979, 1744, 1379, 1535, 12
 $ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23:15:…</code></pre>
 </div>
 </div>
-<p>We will also be removing the <code>flight</code> variable to have one less high cardionality variable to work with.</p>
+<p>We will also be removing the <code>flight</code> variable to have one less high cardinality variable to work with.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>laxflights2022 <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>flight)</span>
@@ -383,6 +383,14 @@ $ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(laxflights2022, <span class="st">"data/laxflights2022.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>A smaller version of the data set is also created and is saved as <a href="data/laxflights2022_lite.csv">data/laxflights2022_lite.csv</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>laxflights2022_lite <span class="ot">&lt;-</span> laxflights2022 <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.02</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(time)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(laxflights2022_lite, <span class="st">"data/laxflights2022_lite.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="data-dictionary" class="level2">
 <h2 class="anchored" data-anchor-id="data-dictionary">Data dictionary</h2>
@@ -392,7 +400,7 @@ $ time      &lt;dttm&gt; 2022-01-01 23:59:00, 2022-01-01 23:43:00, 2022-01-01 23
 <li><code>carrier</code>: Two letter carrier abbreviation.</li>
 <li><code>tailnum</code>: Plane tail number.</li>
 <li><code>origin</code>: FAA airport code for origin of flight.</li>
-<li><code>dest</code>: FAA airport code for destination of flght.</li>
+<li><code>dest</code>: FAA airport code for destination of flight.</li>
 <li><code>distance</code>: Distance between airports, in miles.</li>
 <li><code>time</code>: Scheduled time of the flight as a POSIXct date, rounded to the nearest minute.</li>
 </ul>
