@@ -1,0 +1,15 @@
+{
+  "hash": "6050aeaf8e20c9891f6ee0e6b00d89a3",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Data on Posit Connect using {pins}\"\n---\n\n\nThis page goes through how to put data on [Posit Connect](https://posit.co/products/enterprise/connect/) using [pins](https://pins.rstudio.com/).\n\n## Connecting to Posit Connect\n\nFor the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.\n\n::: {.callout-tip}\nThe function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.\n:::\n\n`CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.\n\n`CONNECT_API_KEY` is created through your Connect server. \n1. Click on your name in the upper right upper right.\n1. Click `API keys`.\n1. Click `New API Key`.\n1. Give your API a key, click ``Create Key`.\n\nOnce you have those two, you can add them to your `.Renviron` file in the following format:\n\n```markdown\nCONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx\nCONNECT_SERVER=https://example.com/\n```\n\nNote that you don't want to put quotes around the values.\n\n## Creating the board\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(pins)\n\nboard <- board_connect()\n```\n:::\n\n\nWe load in the data we created in [data-prep](data-prep.qmd)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nflights <- readr::read_csv(\"data/laxflights2022_lite.csv\")\n```\n:::\n\n\n## Pinning data set to Connect\n\nNow that we have the data set, we can send it to Posit Connect using the `board` we created, the data set and a name of out choosing.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nboard |>\n  pin_write(flights, name = \"laxflights2022_lite\", type = \"rds\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

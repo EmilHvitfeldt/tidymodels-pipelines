@@ -5,6 +5,7 @@
       "/pipelines/standard/index.html",
       "/pipelines/csv-sagemaker-deploy/index.html",
       "/pipelines/csv-connect-deploy/index.html",
+      "/pipelines/pins-connect-deploy/index.html",
       "/pipelines/csv-azure-docker/index.html",
       "/pipelines/csv-connect-docker/index.html",
       "/pipelines/csv-s3-docker/index.html"
