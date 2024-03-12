@@ -429,13 +429,7 @@ Tip
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">docker_args =</span> <span class="fu">list</span>(<span class="at">port =</span> <span class="dv">8080</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The following package(s) will be updated in the lockfile:
-
-# Local ----------------------------------------------------------------------
-- parsnip   [1.2.0 -&gt; 1.2.0.9001]
-- recipes   [1.0.10 -&gt; 1.0.9.9000]
-
-- Lockfile written to "vetiver_renv.lock".</code></pre>
+<pre><code>- The lockfile is already up to date.</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -470,7 +464,7 @@ Tip
 <p>If you are on an ARM architecture locally and deploying an R model, use <code>--platform linux/amd64</code> for RSPM’s fast installation of R package binaries.</p>
 </div>
 </div>
-<p>To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific <code>.Renviron</code> file. (<code>fs::file_touch(".Renviron")</code>) and specifying <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> in that file.</p>
+<p>To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific <code>.Renviron</code> file. (<code>fs::file_touch(".Renviron")</code>) and specifying <code>AZURE_CONTAINER_ENDPOINT</code> and <code>AZURE_SAS_KEY</code> in that file.</p>
 <p>Then we run <a href="https://docs.docker.com/engine/reference/commandline/run/">docker run</a> command. We set 2 flags, <code>--env-file</code> to pass in the environment variables we need, and <code>--publish</code> to specify the port.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--env-file</span> .Renviron <span class="at">--publish</span> 8080:8080 flights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>

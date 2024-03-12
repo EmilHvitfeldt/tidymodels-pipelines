@@ -238,7 +238,7 @@ docker build --tag flights .
 If you are on an ARM architecture locally and deploying an R model, use `--platform linux/amd64` for RSPM’s fast installation of R package binaries.
 :::
 
-To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific `.Renviron` file. (`fs::file_touch(".Renviron")`) and specifying `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in that file.
+To run the docker container, we need to pass in the environment variables for the code to connect to the Connect server. We could pass in the system environment variables, but we will be safer if we just pass in what we need. We do this by creating a project-specific `.Renviron` file. (`fs::file_touch(".Renviron")`) and specifying `AZURE_CONTAINER_ENDPOINT` and `AZURE_SAS_KEY` in that file.
 
 Then we run [docker run](https://docs.docker.com/engine/reference/commandline/run/) command. We set 2 flags, `--env-file` to pass in the environment variables we need, and `--publish` to specify the port.
 
