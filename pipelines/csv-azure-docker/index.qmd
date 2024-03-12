@@ -169,22 +169,7 @@ v
 
 We will version this model on [Azure](https://portal.azure.com/#home) using the [pins](https://pins.rstudio.com/) package.
 
-For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `AZURE_CONTAINER_ENDPOINT` and `AZURE_SAS_KEY`.
-
-::: {.callout-tip}
-The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
-:::
-
-First we need to create a Azure container for us to point to. You can find out how to create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?view=doc-intel-4.0.0&tabs=azure-portal) and how to [create a container](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal?view=doc-intel-4.0.0#create-a-container) from the official documentation. Furthermore, [generating a SAS key](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/create-sas-tokens?view=doc-intel-4.0.0) should be done as well.
-
-Once you have those two, you can add them to your `.Renviron` file in the following format:
-
-```markdown
-AZURE_CONTAINER_ENDPOINT=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-AZURE_SAS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-The container endpoint will have the following format `https://name-of-storage-account.blob.core.windows.net/name-of-container`.
+{{< include ../../_include-envvar-azure.qmd >}}
 
 Once that is all done, we can create a board that connects to Azure, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board.
 

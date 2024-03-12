@@ -31,3 +31,7 @@ Installing Docker should be fairly straightforward. Please refer to [Get Started
 ### Setting up Amazon S3
 
 {{< include _include-envvar-s3.qmd >}}
+
+### Setting up Azure
+
+{{< include _include-envvar-azure.qmd >}}
