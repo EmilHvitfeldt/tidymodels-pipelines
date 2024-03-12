@@ -172,34 +172,9 @@ v
 
 We will version this model on [Amazon S3](https://aws.amazon.com/s3/) using the [pins](https://pins.rstudio.com/) package.
 
-For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+{{< include ../../_include-envvar-s3.qmd >}}
 
-::: {.callout-warning}
-Depending on your S3 setup, you will need to use additional variables to connect. Please see <https://github.com/paws-r/paws/blob/main/docs/credentials.md> and this [pins issue](https://github.com/rstudio/pins-r/issues/608) for help if the following paragraphs doesn't work for you.
-:::
-
-::: {.callout-tip}
-The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html) can be very handy to open `.Renviron` file to specify your environment variables.
-:::
-
-You can find both of these keys in the same location. 
-
-1. Open the [AWS Console](https://console.aws.amazon.com/)
-1. Click on your username near the top right and select `Security Credentials`
-1. Click on `Users` in the sidebar
-1. Click on your username
-1. Click on the `Security Credentials` tab
-1. Click `Create Access Key`
-1. Click `Show User Security Credentials`
-
-Once you have those two, you can add them to your `.Renviron` file in the following format:
-
-```markdown
-AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-Note that you don't want to put quotes around the values. Once that is all done, we can create a board that connects to Amazon S3, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board. When using S3 you need to specify a bucket and its region. This cannot be done with Pins and has to be done beforehand.
+Once that is all done, we can create a board that connects to Amazon S3, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board. When using S3 you need to specify a bucket and its region. This cannot be done with Pins and has to be done beforehand.
 
 ```{r}
 #| message: false

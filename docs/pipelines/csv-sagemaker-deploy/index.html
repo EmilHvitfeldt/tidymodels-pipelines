@@ -130,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../../data-prep.html"> 
 <span class="menu-text">Data Preparation</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../data-pins.html"> 
+<span class="menu-text">Data Pins</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -418,7 +422,8 @@ Tip
 <p>Once you have those two, you can add them to your <code>.Renviron</code> file in the following format:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note that you don’t want to put quotes around the values. Once that is all done, we can create a board that connects to Amazon S3, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board. When using S3 you need to specify a bucket and its region. This cannot be done with Pins and has to be done beforehand.</p>
+<p>Note that you don’t want to put quotes around the values.</p>
+<p>Once that is all done, we can create a board that connects to Amazon S3, and write our vetiver model to the board. Now that you have set up the environment variables, we can create a pins board. When using S3 you need to specify a bucket and its region. This cannot be done with Pins and has to be done beforehand.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_s3</span>(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidymodels-pipeline-example"</span>,</span>
