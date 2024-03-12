@@ -1,10 +1,14 @@
 ---
-title: "Data on Posit Connect using {pins}"
+title: "Put data places with {pins}"
 ---
 
-This page goes through how to put data on [Posit Connect](https://posit.co/products/enterprise/connect/) using [pins](https://pins.rstudio.com/).
+This page shows how to use [pins](https://pins.rstudio.com/) to store data in various platforms as needed for the [pipelines](pipelines.qmd).
 
-## Connecting to Posit Connect
+## Posit Connect
+
+This section goes through how to put data on [Posit Connect](https://posit.co/products/enterprise/connect/) using [pins](https://pins.rstudio.com/).
+
+### Connecting to Posit Connect
 
 For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are `CONNECT_SERVER` and `CONNECT_API_KEY`.
 
@@ -29,7 +33,8 @@ CONNECT_SERVER=https://example.com/
 
 Note that you don't want to put quotes around the values.
 
-## Creating the board
+### Creating the board
+
 ```{r}
 #| message: false
 library(pins)
@@ -44,7 +49,7 @@ We load in the data we created in [data-prep](data-prep.qmd)
 flights <- readr::read_csv("data/laxflights2022_lite.csv")
 ```
 
-## Pinning data set to Connect
+### Pinning data set to Connect
 
 Now that we have the data set, we can send it to Posit Connect using the `board` we created, the data set and a name of out choosing.
 

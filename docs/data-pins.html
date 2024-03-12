@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data on Posit Connect using {pins}</title>
+<title>Put data places with {pins}</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,9 +149,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#connecting-to-posit-connect" id="toc-connecting-to-posit-connect" class="nav-link active" data-scroll-target="#connecting-to-posit-connect">Connecting to Posit Connect</a></li>
+  <li><a href="#posit-connect" id="toc-posit-connect" class="nav-link active" data-scroll-target="#posit-connect">Posit Connect</a>
+  <ul class="collapse">
+  <li><a href="#connecting-to-posit-connect" id="toc-connecting-to-posit-connect" class="nav-link" data-scroll-target="#connecting-to-posit-connect">Connecting to Posit Connect</a></li>
   <li><a href="#creating-the-board" id="toc-creating-the-board" class="nav-link" data-scroll-target="#creating-the-board">Creating the board</a></li>
   <li><a href="#pinning-data-set-to-connect" id="toc-pinning-data-set-to-connect" class="nav-link" data-scroll-target="#pinning-data-set-to-connect">Pinning data set to Connect</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -160,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data on Posit Connect using {pins}</h1>
+<h1 class="title">Put data places with {pins}</h1>
 </div>
 
 
@@ -177,9 +180,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page goes through how to put data on <a href="https://posit.co/products/enterprise/connect/">Posit Connect</a> using <a href="https://pins.rstudio.com/">pins</a>.</p>
-<section id="connecting-to-posit-connect" class="level2">
-<h2 class="anchored" data-anchor-id="connecting-to-posit-connect">Connecting to Posit Connect</h2>
+<p>This page shows how to use <a href="https://pins.rstudio.com/">pins</a> to store data in various platforms as needed for the <a href="./pipelines.html">pipelines</a>.</p>
+<section id="posit-connect" class="level2">
+<h2 class="anchored" data-anchor-id="posit-connect">Posit Connect</h2>
+<p>This section goes through how to put data on <a href="https://posit.co/products/enterprise/connect/">Posit Connect</a> using <a href="https://pins.rstudio.com/">pins</a>.</p>
+<section id="connecting-to-posit-connect" class="level3">
+<h3 class="anchored" data-anchor-id="connecting-to-posit-connect">Connecting to Posit Connect</h3>
 <p>For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are <code>CONNECT_SERVER</code> and <code>CONNECT_API_KEY</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -201,8 +207,8 @@ Tip
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that you don’t want to put quotes around the values.</p>
 </section>
-<section id="creating-the-board" class="level2">
-<h2 class="anchored" data-anchor-id="creating-the-board">Creating the board</h2>
+<section id="creating-the-board" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-board">Creating the board</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -213,8 +219,8 @@ Tip
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/laxflights2022_lite.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="pinning-data-set-to-connect" class="level2">
-<h2 class="anchored" data-anchor-id="pinning-data-set-to-connect">Pinning data set to Connect</h2>
+<section id="pinning-data-set-to-connect" class="level3">
+<h3 class="anchored" data-anchor-id="pinning-data-set-to-connect">Pinning data set to Connect</h3>
 <p>Now that we have the data set, we can send it to Posit Connect using the <code>board</code> we created, the data set and a name of out choosing.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
@@ -222,6 +228,7 @@ Tip
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
