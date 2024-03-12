@@ -1,4 +1,5 @@
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # tidymodels-pipelines
@@ -22,14 +23,12 @@ For the smoothest experience, we recommend that you authenticate using
 environment variables. The two variables you will need are
 `CONNECT_SERVER` and `CONNECT_API_KEY`.
 
-<div class="callout-tip">
-
-The function
-[usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html)
-can be very handy to open `.Renviron` file to specify your environment
-variables.
-
-</div>
+> **Tip**
+>
+> The function
+> [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html)
+> can be very handy to open `.Renviron` file to specify your environment
+> variables.
 
 `CONNECT_SERVER` is the URL of the posit connect page. So if your
 connect server is accessed through
@@ -55,24 +54,20 @@ For the smoothest experience, we recommend that you authenticate using
 environment variables. The two variables you will need are
 `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 
-<div class="callout-warning">
+> **Warning**
+>
+> Depending on your S3 setup, you will need to use additional variables
+> to connect. Please see
+> <https://github.com/paws-r/paws/blob/main/docs/credentials.md> and
+> this [pins issue](https://github.com/rstudio/pins-r/issues/608) for
+> help if the following paragraphs doesn’t work for you.
 
-Depending on your S3 setup, you will need to use additional variables to
-connect. Please see
-<https://github.com/paws-r/paws/blob/main/docs/credentials.md> and this
-[pins issue](https://github.com/rstudio/pins-r/issues/608) for help if
-the following paragraphs doesn’t work for you.
-
-</div>
-
-<div class="callout-tip">
-
-The function
-[usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html)
-can be very handy to open `.Renviron` file to specify your environment
-variables.
-
-</div>
+> **Tip**
+>
+> The function
+> [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edit.html)
+> can be very handy to open `.Renviron` file to specify your environment
+> variables.
 
 You can find both of these keys in the same location.
 
