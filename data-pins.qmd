@@ -38,3 +38,42 @@ Now that we have the data set, we can send it to Posit Connect using the `board`
 board |>
   pin_write(flights, name = "laxflights2022_lite", type = "rds")
 ```
+
+
+## Amazon S3
+
+This section goes through how to put data on [Amazon S3](https://aws.amazon.com/s3/) using [pins](https://pins.rstudio.com/).
+
+### Connecting to Amazon S3
+
+{{< include _include-envvar-s3.qmd >}}
+
+### Creating the board
+
+```{r}
+#| message: false
+library(pins)
+
+board <- board_s3(
+  "tidymodels-pipeline-example",
+  region = "us-west-1"
+)
+```
+
+We load in the data we created in [data-prep](data-prep.qmd)
+
+```{r}
+#| message: false
+flights <- readr::read_csv("data/laxflights2022_lite.csv")
+```
+
+### Pinning data set to Amazon S3
+
+Now that we have the data set, we can send it to Amazon S3 using the `board` we created, the data set and a name of out choosing.
+
+```{r}
+#| eval: false
+#| message: false
+board |>
+  pin_write(flights, name = "laxflights2022_lite", type = "rds")
+```

@@ -155,6 +155,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#creating-the-board" id="toc-creating-the-board" class="nav-link" data-scroll-target="#creating-the-board">Creating the board</a></li>
   <li><a href="#pinning-data-set-to-connect" id="toc-pinning-data-set-to-connect" class="nav-link" data-scroll-target="#pinning-data-set-to-connect">Pinning data set to Connect</a></li>
   </ul></li>
+  <li><a href="#amazon-s3" id="toc-amazon-s3" class="nav-link" data-scroll-target="#amazon-s3">Amazon S3</a>
+  <ul class="collapse">
+  <li><a href="#connecting-to-amazon-s3" id="toc-connecting-to-amazon-s3" class="nav-link" data-scroll-target="#connecting-to-amazon-s3">Connecting to Amazon S3</a></li>
+  <li><a href="#creating-the-board-1" id="toc-creating-the-board-1" class="nav-link" data-scroll-target="#creating-the-board-1">Creating the board</a></li>
+  <li><a href="#pinning-data-set-to-amazon-s3" id="toc-pinning-data-set-to-amazon-s3" class="nav-link" data-scroll-target="#pinning-data-set-to-amazon-s3">Pinning data set to Amazon S3</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -225,6 +231,77 @@ Tip
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(flights, <span class="at">name =</span> <span class="st">"laxflights2022_lite"</span>, <span class="at">type =</span> <span class="st">"rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="amazon-s3" class="level2">
+<h2 class="anchored" data-anchor-id="amazon-s3">Amazon S3</h2>
+<p>This section goes through how to put data on <a href="https://aws.amazon.com/s3/">Amazon S3</a> using <a href="https://pins.rstudio.com/">pins</a>.</p>
+<section id="connecting-to-amazon-s3" class="level3">
+<h3 class="anchored" data-anchor-id="connecting-to-amazon-s3">Connecting to Amazon S3</h3>
+<p>For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending on your S3 setup, you will need to use additional variables to connect. Please see <a href="https://github.com/paws-r/paws/blob/main/docs/credentials.md" class="uri">https://github.com/paws-r/paws/blob/main/docs/credentials.md</a> and this <a href="https://github.com/rstudio/pins-r/issues/608">pins issue</a> for help if the following paragraphs doesn’t work for you.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The function <a href="https://usethis.r-lib.org/reference/edit.html">usethis::edit_r_environ()</a> can be very handy to open <code>.Renviron</code> file to specify your environment variables.</p>
+</div>
+</div>
+<p>You can find both of these keys in the same location.</p>
+<ol type="1">
+<li>Open the <a href="https://console.aws.amazon.com/">AWS Console</a></li>
+<li>Click on your username near the top right and select <code>Security Credentials</code></li>
+<li>Click on <code>Users</code> in the sidebar</li>
+<li>Click on your username</li>
+<li>Click on the <code>Security Credentials</code> tab</li>
+<li>Click <code>Create Access Key</code></li>
+<li>Click <code>Show User Security Credentials</code></li>
+</ol>
+<p>Once you have those two, you can add them to your <code>.Renviron</code> file in the following format:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that you don’t want to put quotes around the values.</p>
+</section>
+<section id="creating-the-board-1" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-board-1">Creating the board</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_s3</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidymodels-pipeline-example"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">region =</span> <span class="st">"us-west-1"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We load in the data we created in <a href="./data-prep.html">data-prep</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/laxflights2022_lite.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pinning-data-set-to-amazon-s3" class="level3">
+<h3 class="anchored" data-anchor-id="pinning-data-set-to-amazon-s3">Pinning data set to Amazon S3</h3>
+<p>Now that we have the data set, we can send it to Amazon S3 using the <code>board</code> we created, the data set and a name of out choosing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(flights, <span class="at">name =</span> <span class="st">"laxflights2022_lite"</span>, <span class="at">type =</span> <span class="st">"rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
