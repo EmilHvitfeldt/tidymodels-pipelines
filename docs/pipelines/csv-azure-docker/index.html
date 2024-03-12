@@ -130,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../../data-prep.html"> 
 <span class="menu-text">Data Preparation</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../data-pins.html"> 
+<span class="menu-text">Data Pins</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -425,7 +429,13 @@ Tip
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">docker_args =</span> <span class="fu">list</span>(<span class="at">port =</span> <span class="dv">8080</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>- The lockfile is already up to date.</code></pre>
+<pre><code>The following package(s) will be updated in the lockfile:
+
+# Local ----------------------------------------------------------------------
+- parsnip   [1.2.0 -&gt; 1.2.0.9001]
+- recipes   [1.0.10 -&gt; 1.0.9.9000]
+
+- Lockfile written to "vetiver_renv.lock".</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">

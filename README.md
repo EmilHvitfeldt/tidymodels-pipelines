@@ -48,6 +48,8 @@ CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 CONNECT_SERVER=https://example.com/
 ```
 
+Note that you don’t want to put quotes around the values.
+
 ### Setting up Amazon S3
 
 For the smoothest experience, we recommend that you authenticate using
