@@ -78,11 +78,11 @@ board |>
   pin_write(flights, name = "laxflights2022_lite", type = "rds")
 ```
 
-## Azure storage container
+## Azure
 
-This section goes through how to put data on [Posit Connect](https://learn.microsoft.com/en-us/azure/storage/) using [pins](https://pins.rstudio.com/).
+This section goes through how to put data on [Azure storage](https://learn.microsoft.com/en-us/azure/storage/) using [pins](https://pins.rstudio.com/).
 
-### Connecting to Posit Connect
+### Connecting to Azure
 
 {{< include _include-envvar-connect.qmd >}}
 
@@ -91,8 +91,15 @@ This section goes through how to put data on [Posit Connect](https://learn.micro
 ```{r}
 #| message: false
 library(pins)
+library(AzureStor)
 
-board <- board_connect()
+container <-
+  storage_container(
+    endpoint = Sys.getenv("AZURE_CONTAINER_ENDPOINT"),
+    sas = Sys.getenv("AZURE_SAS_KEY")
+  )
+
+board <- board_azure(container)
 ```
 
 We load in the data we created in [data-prep](data-prep.qmd)
@@ -102,9 +109,9 @@ We load in the data we created in [data-prep](data-prep.qmd)
 flights <- readr::read_csv("data/laxflights2022_lite.csv")
 ```
 
-### Pinning data set to Connect
+### Pinning data set to Azure storage container
 
-Now that we have the data set, we can send it to Posit Connect using the `board` we created, the data set and a name of our choosing.
+Now that we have the data set, we can send it to Azure using the `board` we created, the data set and a name of our choosing.
 
 ```{r}
 #| eval: false
