@@ -161,6 +161,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#creating-the-board-1" id="toc-creating-the-board-1" class="nav-link" data-scroll-target="#creating-the-board-1">Creating the board</a></li>
   <li><a href="#pinning-data-set-to-amazon-s3" id="toc-pinning-data-set-to-amazon-s3" class="nav-link" data-scroll-target="#pinning-data-set-to-amazon-s3">Pinning data set to Amazon S3</a></li>
   </ul></li>
+  <li><a href="#azure-storage-container" id="toc-azure-storage-container" class="nav-link" data-scroll-target="#azure-storage-container">Azure storage container</a>
+  <ul class="collapse">
+  <li><a href="#connecting-to-posit-connect-1" id="toc-connecting-to-posit-connect-1" class="nav-link" data-scroll-target="#connecting-to-posit-connect-1">Connecting to Posit Connect</a></li>
+  <li><a href="#creating-the-board-2" id="toc-creating-the-board-2" class="nav-link" data-scroll-target="#creating-the-board-2">Creating the board</a></li>
+  <li><a href="#pinning-data-set-to-connect-1" id="toc-pinning-data-set-to-connect-1" class="nav-link" data-scroll-target="#pinning-data-set-to-connect-1">Pinning data set to Connect</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -227,7 +233,7 @@ Tip
 </section>
 <section id="pinning-data-set-to-connect" class="level3">
 <h3 class="anchored" data-anchor-id="pinning-data-set-to-connect">Pinning data set to Connect</h3>
-<p>Now that we have the data set, we can send it to Posit Connect using the <code>board</code> we created, the data set and a name of out choosing.</p>
+<p>Now that we have the data set, we can send it to Posit Connect using the <code>board</code> we created, the data set and a name of our choosing.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(flights, <span class="at">name =</span> <span class="st">"laxflights2022_lite"</span>, <span class="at">type =</span> <span class="st">"rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -298,10 +304,57 @@ Tip
 </section>
 <section id="pinning-data-set-to-amazon-s3" class="level3">
 <h3 class="anchored" data-anchor-id="pinning-data-set-to-amazon-s3">Pinning data set to Amazon S3</h3>
-<p>Now that we have the data set, we can send it to Amazon S3 using the <code>board</code> we created, the data set and a name of out choosing.</p>
+<p>Now that we have the data set, we can send it to Amazon S3 using the <code>board</code> we created, the data set and a name of our choosing.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(flights, <span class="at">name =</span> <span class="st">"laxflights2022_lite"</span>, <span class="at">type =</span> <span class="st">"rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="azure-storage-container" class="level2">
+<h2 class="anchored" data-anchor-id="azure-storage-container">Azure storage container</h2>
+<p>This section goes through how to put data on <a href="https://learn.microsoft.com/en-us/azure/storage/">Posit Connect</a> using <a href="https://pins.rstudio.com/">pins</a>.</p>
+<section id="connecting-to-posit-connect-1" class="level3">
+<h3 class="anchored" data-anchor-id="connecting-to-posit-connect-1">Connecting to Posit Connect</h3>
+<p>For the smoothest experience, we recommend that you authenticate using environment variables. The two variables you will need are <code>CONNECT_SERVER</code> and <code>CONNECT_API_KEY</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The function <a href="https://usethis.r-lib.org/reference/edit.html">usethis::edit_r_environ()</a> can be very handy to open <code>.Renviron</code> file to specify your environment variables.</p>
+</div>
+</div>
+<p><code>CONNECT_SERVER</code> is the URL of the posit connect page. So if your connect server is accessed through <code>https://example.com/connect/#/content/</code> then you can find <code>CONNECT_SERVER</code> by removing <code>connect/</code> and everything that follows it, leaving you with <code>https://example.com/</code>.</p>
+<p><code>CONNECT_API_KEY</code> is created through your Connect server. 1. Click on your name in the upper right upper right. 1. Click <code>API keys</code>. 1. Click <code>New API Key</code>. 1. Give your API a key, click `<code>Create Key</code>.</p>
+<p>Once you have those two, you can add them to your <code>.Renviron</code> file in the following format:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that you don’t want to put quotes around the values.</p>
+</section>
+<section id="creating-the-board-2" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-board-2">Creating the board</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We load in the data we created in <a href="./data-prep.html">data-prep</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/laxflights2022_lite.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pinning-data-set-to-connect-1" class="level3">
+<h3 class="anchored" data-anchor-id="pinning-data-set-to-connect-1">Pinning data set to Connect</h3>
+<p>Now that we have the data set, we can send it to Posit Connect using the <code>board</code> we created, the data set and a name of our choosing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(flights, <span class="at">name =</span> <span class="st">"laxflights2022_lite"</span>, <span class="at">type =</span> <span class="st">"rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
