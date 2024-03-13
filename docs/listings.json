@@ -2,6 +2,7 @@
   {
     "listing": "/pipelines.html",
     "items": [
+      "/pipelines/pins-sagemaker-deploy/index.html",
       "/pipelines/pins-s3-docker/index.html",
       "/pipelines/standard/index.html",
       "/pipelines/csv-sagemaker-deploy/index.html",
