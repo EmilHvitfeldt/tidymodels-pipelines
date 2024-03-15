@@ -4,6 +4,7 @@ description: "This analysis is done using tidymodels R alone"
 image: ../../images/standard.jpg
 categories:
   - csv
+  - standard
 ---
 
 ::: {.callout-note}
@@ -24,21 +25,14 @@ library(embed)
 
 ## Loading Data
 
-We are using the standard `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page.
+We are using the standard `laxflights2022_lite` data set described on the [data preparation](../../data-prep.qmd) page.
 
 ```{r}
 #| label: loading-data
 #| message: false
-flights <- readr::read_csv(here::here("data/laxflights2022.csv"))
+flights <- readr::read_csv(here::here("data/laxflights2022_lite.csv"))
 
 glimpse(flights)
-```
-
-downsampling for speed for now.
-
-```{r}
-flights <- slice_sample(flights, prop = 0.2) %>%
-  arrange(time)
 ```
 
 ## Modeling

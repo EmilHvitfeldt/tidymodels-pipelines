@@ -1,0 +1,7 @@
+::: new
+::: {.callout-note}
+## Changes from standard
+
+All changes from the [standard pipeline](../standard/index.qmd) are highlighted with a cranberry line to the right.
+:::
+:::
