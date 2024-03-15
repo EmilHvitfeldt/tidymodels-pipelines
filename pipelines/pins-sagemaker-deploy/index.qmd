@@ -1,5 +1,5 @@
 ---
-title: Pins, Vetiver and Amazon SageMaker
+title: AWS, S3 Pins Input, SageMaker Endpoint
 description: "Using vetiver to version a model on Amazon SageMaker as an endpoint, and predict from it"
 image: ../../images/pins-sagemaker-deploy.jpg
 categories:

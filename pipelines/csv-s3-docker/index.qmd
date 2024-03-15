@@ -1,5 +1,5 @@
 ---
-title: Vetiver, S3, and Docker
+title: AWS, CSV Input, S3 Docker Endpoint
 description: "Using vetiver to version a model in a S3 bucket, and predict with it from a Docker container"
 image: ../../images/csv-s3-docker.jpg
 categories:
@@ -7,6 +7,7 @@ categories:
   - vetiver
   - Docker
   - Amazon S3
+  - AWS
 ---
 
 ::: {.callout-note}

@@ -2,16 +2,16 @@
   {
     "listing": "/pipelines.html",
     "items": [
-      "/pipelines/pins-sagemaker-deploy/index.html",
-      "/pipelines/pins-azure-docker/index.html",
-      "/pipelines/pins-s3-docker/index.html",
-      "/pipelines/standard/index.html",
+      "/pipelines/csv-s3-docker/index.html",
       "/pipelines/csv-sagemaker-deploy/index.html",
+      "/pipelines/pins-s3-docker/index.html",
+      "/pipelines/pins-sagemaker-deploy/index.html",
+      "/pipelines/csv-azure-docker/index.html",
+      "/pipelines/pins-azure-docker/index.html",
+      "/pipelines/csv-connect-docker/index.html",
       "/pipelines/csv-connect-deploy/index.html",
       "/pipelines/pins-connect-deploy/index.html",
-      "/pipelines/csv-azure-docker/index.html",
-      "/pipelines/csv-connect-docker/index.html",
-      "/pipelines/csv-s3-docker/index.html"
+      "/pipelines/standard/index.html"
     ]
   }
 ]

@@ -1,5 +1,5 @@
 ---
-title: Pins, Vetiver, Azure, and Docker
+title: Azure, Pins Input, Docker Endpoint
 description: "Using vetiver to version a model in a Azure Storage Container, and predict with it from a Docker container"
 image: ../../images/pins-azure-docker.jpg
 categories:

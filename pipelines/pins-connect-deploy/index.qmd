@@ -1,5 +1,5 @@
 ---
-title: Vetiver and Posit Connect
+title: Posit Connect, Pins Input, Native Endpoint
 description: "Using vetiver to version a model on Posit Connect as an endpoint, and predict from it"
 image: ../../images/pins-connect-deploy.jpg
 categories:

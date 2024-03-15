@@ -1,11 +1,12 @@
 ---
-title: Vetiver and Amazon SageMaker
+title: AWS, CSV Input, SageMaker Endpoint
 description: "Using vetiver to version a model on Amazon SageMaker as an endpoint, and predict from it"
 image: ../../images/csv-sagemaker-deploy.jpg
 categories:
   - csv
   - vetiver
   - Amazon SageMaker
+  - AWS
 ---
 
 ::: {.callout-note}
