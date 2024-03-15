@@ -1,6 +1,6 @@
 ---
 title: Azure, CSV Input, Docker Endpoint
-description: "Using vetiver to version a model in a Azure Storage Container, and predict with it from a Docker container"
+description: "Using vetiver to version a model in an Azure Storage Container, and predict with it from a Docker container"
 image: ../../images/csv-azure-docker.jpg
 categories:
   - csv
