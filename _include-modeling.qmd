@@ -96,6 +96,6 @@ Once we are satisfied with the modeling that has been done, we can fit our final
 
 ```{r}
 xgb_last <- xgb_wf %>%
-  finalize_workflow(select_best(xgb_rs, "rmse")) %>%
+  finalize_workflow(select_best(xgb_rs, metric = "rmse")) %>%
   last_fit(flights_split)
 ```

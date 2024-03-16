@@ -362,7 +362,7 @@ $ time      &lt;dttm&gt; 2022-01-01 13:15:00, 2022-01-01 14:00:00, 2022-01-01 14
 <p>Once we are satisfied with the modeling that has been done, we can fit our final model. We use <code>finalize_workflow()</code> to use the best hyperparameters, and <code>last_fit()</code> to fit the model to the training data set and evaluate it on the testing data set.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>xgb_last <span class="ot">&lt;-</span> xgb_wf <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalize_workflow</span>(<span class="fu">select_best</span>(xgb_rs, <span class="st">"rmse"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalize_workflow</span>(<span class="fu">select_best</span>(xgb_rs, <span class="at">metric =</span> <span class="st">"rmse"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(flights_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
