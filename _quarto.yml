@@ -11,7 +11,7 @@ website:
         href: pipelines.qmd
       - text: Data Preparation
         href: data-prep.qmd
-      - text: Data Pins
+      - text: Pinning the Data
         href: data-pins.qmd
 
 format:
