@@ -159,6 +159,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a></li>
   <li><a href="#fitting-final-model" id="toc-fitting-final-model" class="nav-link" data-scroll-target="#fitting-final-model">Fitting Final Model</a></li>
   </ul></li>
+  <li><a href="#creating-vetiver-model" id="toc-creating-vetiver-model" class="nav-link" data-scroll-target="#creating-vetiver-model">Creating vetiver model</a></li>
+  <li><a href="#version-model-with-pins-on-posit-connect" id="toc-version-model-with-pins-on-posit-connect" class="nav-link" data-scroll-target="#version-model-with-pins-on-posit-connect">Version model with pins on Posit Connect</a></li>
+  <li><a href="#make-predictions-from-connect-endpoint" id="toc-make-predictions-from-connect-endpoint" class="nav-link" data-scroll-target="#make-predictions-from-connect-endpoint">Make predictions from Connect endpoint</a></li>
   </ul>
 </nav>
     </div>
@@ -218,7 +221,7 @@ Changes from standard
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>All changes from the <a href="../../pipelines/standard/index.html">standard pipeline</a> is highlighted with a cranberry line to the right.</p>
+<p>All changes from the <a href="../../pipelines/standard/index.html">standard pipeline</a> are highlighted with a cranberry line to the right.</p>
 </div>
 </div>
 </div>
@@ -289,9 +292,9 @@ $ time      &lt;dttm&gt; 2022-01-01 13:15:00, 2022-01-01 14:00:00, 2022-01-01 14
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
 <p>As a reminder, the modeling task we are trying to accomplish is the following:</p>
 <blockquote class="blockquote">
-<p>Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay <code>arr_delay</code>.</p>
+<p>Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay <code>arr_delay</code>?</p>
 </blockquote>
-<p>Our outcome is <code>arr_delay</code> and the remaining variables are predictors. We will be fitting a xgboost model as a regression model.</p>
+<p>Our outcome is <code>arr_delay</code> and the remaining variables are predictors. We will be fitting an xgboost model as a regression model.</p>
 <section id="splitting-data" class="level3">
 <h3 class="anchored" data-anchor-id="splitting-data">Splitting Data</h3>
 <p>Since the data set is already in chronological order, we can create a time split of the data using <code>initial_time_split()</code>, this will put the first 75% of the data into the training data set, and the remaining 25% into the testing data set.</p>
@@ -392,7 +395,6 @@ $ time      &lt;dttm&gt; 2022-01-01 13:15:00, 2022-01-01 14:00:00, 2022-01-01 14
 </div>
 </section>
 </section>
-<div class="new">
 <section id="creating-vetiver-model" class="level2">
 <h2 class="anchored" data-anchor-id="creating-vetiver-model">Creating vetiver model</h2>
 <div class="cell">
@@ -462,10 +464,10 @@ A xgboost regression modeling workflow using 7 features</code></pre>
 # ℹ 2,807 more rows</code></pre>
 </div>
 </div>
+<p>:::</p>
+
+
 </section>
-</div>
-
-
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

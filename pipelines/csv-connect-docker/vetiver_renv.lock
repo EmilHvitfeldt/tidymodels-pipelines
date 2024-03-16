@@ -1141,10 +1141,9 @@
     },
     "parsnip": {
       "Package": "parsnip",
-      "Version": "1.2.0.9001",
-      "Source": "Local",
-      "RemotePkgRef": "local::/Users/emilhvitfeldt/Github/parsnip",
-      "RemoteType": "local",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "cli",
@@ -1167,7 +1166,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "960c6a9261835879a50afc4527636657"
+      "Hash": "814c5fbc911f1b1c031746a22e7ac6e2"
     },
     "pillar": {
       "Package": "pillar",
@@ -1452,11 +1451,9 @@
     },
     "recipes": {
       "Package": "recipes",
-      "Version": "1.0.9.9000",
-      "Source": "Local",
-      "Remotes": "tidymodels/parsnip",
-      "RemotePkgRef": "local::/Users/emilhvitfeldt/Github/recipes",
-      "RemoteType": "local",
+      "Version": "1.0.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "Matrix",
         "R",
@@ -1483,7 +1480,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "597561d90050c09a47222b8460821ba5"
+      "Hash": "69783cdd607c58fffb21c5c26c6ededf"
     },
     "rematch2": {
       "Package": "rematch2",

@@ -159,6 +159,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a></li>
   <li><a href="#fitting-final-model" id="toc-fitting-final-model" class="nav-link" data-scroll-target="#fitting-final-model">Fitting Final Model</a></li>
   </ul></li>
+  <li><a href="#creating-vetiver-model" id="toc-creating-vetiver-model" class="nav-link" data-scroll-target="#creating-vetiver-model">Creating vetiver model</a></li>
+  <li><a href="#version-model-with-pins-on-amazon-s3" id="toc-version-model-with-pins-on-amazon-s3" class="nav-link" data-scroll-target="#version-model-with-pins-on-amazon-s3">Version model with pins on Amazon S3</a></li>
+  <li><a href="#create-docker-artifacts" id="toc-create-docker-artifacts" class="nav-link" data-scroll-target="#create-docker-artifacts">Create Docker artifacts</a></li>
+  <li><a href="#build-and-run-your-dockerfile" id="toc-build-and-run-your-dockerfile" class="nav-link" data-scroll-target="#build-and-run-your-dockerfile">Build and run your Dockerfile</a></li>
+  <li><a href="#make-predictions-from-docker-container" id="toc-make-predictions-from-docker-container" class="nav-link" data-scroll-target="#make-predictions-from-docker-container">Make predictions from Docker container</a></li>
   </ul>
 </nav>
     </div>
@@ -314,9 +319,9 @@ $ time      &lt;dttm&gt; 2022-01-01 13:15:00, 2022-01-01 14:00:00, 2022-01-01 14
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
 <p>As a reminder, the modeling task we are trying to accomplish is the following:</p>
 <blockquote class="blockquote">
-<p>Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay <code>arr_delay</code>.</p>
+<p>Given all the information we have, from the moment the plane leaves for departure. Can we predict the arrival delay <code>arr_delay</code>?</p>
 </blockquote>
-<p>Our outcome is <code>arr_delay</code> and the remaining variables are predictors. We will be fitting a xgboost model as a regression model.</p>
+<p>Our outcome is <code>arr_delay</code> and the remaining variables are predictors. We will be fitting an xgboost model as a regression model.</p>
 <section id="splitting-data" class="level3">
 <h3 class="anchored" data-anchor-id="splitting-data">Splitting Data</h3>
 <p>Since the data set is already in chronological order, we can create a time split of the data using <code>initial_time_split()</code>, this will put the first 75% of the data into the training data set, and the remaining 25% into the testing data set.</p>
@@ -417,7 +422,6 @@ $ time      &lt;dttm&gt; 2022-01-01 13:15:00, 2022-01-01 14:00:00, 2022-01-01 14
 </div>
 </section>
 </section>
-<div class="new">
 <section id="creating-vetiver-model" class="level2">
 <h2 class="anchored" data-anchor-id="creating-vetiver-model">Creating vetiver model</h2>
 <div class="cell">
@@ -456,7 +460,13 @@ A xgboost regression modeling workflow using 7 features</code></pre>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">docker_args =</span> <span class="fu">list</span>(<span class="at">port =</span> <span class="dv">8080</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>- The lockfile is already up to date.</code></pre>
+<pre><code>The following package(s) will be updated in the lockfile:
+
+# CRAN -----------------------------------------------------------------------
+- parsnip   [1.2.0.9001 -&gt; 1.2.0]
+- recipes   [1.0.9.9000 -&gt; 1.0.10]
+
+- Lockfile written to "vetiver_renv.lock".</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -521,10 +531,10 @@ Tip
 # ℹ 2,807 more rows</code></pre>
 </div>
 </div>
+<p>:::</p>
+
+
 </section>
-</div>
-
-
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
