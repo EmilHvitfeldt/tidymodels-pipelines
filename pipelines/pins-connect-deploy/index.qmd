@@ -25,7 +25,8 @@ We are using the tidymodels package to do the modeling, [embed](https://embed.ti
 #| message: false
 # install.packages("pak")
 # pak::pak(c("tidymodels", "embed", "vetiver", "pins", "rsconnect", 
-# "doParallel", "lme4", "xgboost", "plumber"))
+# "doParallel", "lme4", "xgboost", "plumber", "cpp11", "dqrng", "RcppEigen",
+# "RcppProgress", "testthat", "BH", "sitmo"))
 library(tidymodels)
 library(embed)
 library(vetiver)
