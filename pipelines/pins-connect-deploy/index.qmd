@@ -37,7 +37,7 @@ library(rsconnect)
 
 ::: new
 
-## Loading data from Posit Connect with pins
+## Getting set up on Posit Connect
 
 We will fetch data from and version the final model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
 
