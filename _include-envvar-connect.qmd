@@ -16,8 +16,8 @@ The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edi
 Once you have those two, you can add them to your `.Renviron` file in the following format:
 
 ```markdown
-CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 CONNECT_SERVER=https://example.com/
+CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 Note that you don't want to put quotes around the values.
