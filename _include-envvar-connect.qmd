@@ -7,10 +7,11 @@ The function [usethis::edit_r_environ()](https://usethis.r-lib.org/reference/edi
 `CONNECT_SERVER` is the URL of the posit connect page. So if your connect server is accessed through `https://example.com/connect/#/content/` then you can find `CONNECT_SERVER` by removing `connect/` and everything that follows it, leaving you with `https://example.com/`.
 
 `CONNECT_API_KEY` is created through your Connect server. 
-1. Click on your name in the upper right upper right.
-1. Click `API keys`.
-1. Click `New API Key`.
-1. Give your API a key, click ``Create Key`.
+
+1. Click on your name in the upper right.
+2. Click `API keys`.
+3. Click `New API Key`.
+4. Give your API key a name, click `Create Key`.
 
 Once you have those two, you can add them to your `.Renviron` file in the following format:
 
