@@ -81,7 +81,7 @@ board <- board_connect()
 vetiver_pin_write(board, v)
 ```
 
-Since we are using `vetiver_deploy_rsconnect()` which uses the {rsconnect} package, we need to make sure that we have the right authetication and settings. We can do this using `rsconnect::connectApiUser()`.
+Since we are using `vetiver_deploy_rsconnect()` which uses the {rsconnect} package, we need to make sure that we have the right authentication and settings. We can do this using `rsconnect::connectApiUser()`.
 
 ```markdown
 rsconnect::connectApiUser(
