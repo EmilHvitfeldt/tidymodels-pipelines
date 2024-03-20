@@ -102,7 +102,7 @@
     "href": "pipelines/csv-connect-docker/index.html#creating-vetiver-model",
     "title": "Posit Connect, CSV Input, Docker Endpoint",
     "section": "Creating vetiver model",
-    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"flights_xgb\")\nv\n\n\n── flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
+    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"emil.hvitfeldt/flights_xgb\")\nv\n\n\n── emil.hvitfeldt/flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
   },
   {
     "objectID": "pipelines/csv-connect-docker/index.html#version-model-with-pins-on-posit-connect",
@@ -116,7 +116,7 @@
     "href": "pipelines/csv-connect-docker/index.html#create-docker-artifacts",
     "title": "Posit Connect, CSV Input, Docker Endpoint",
     "section": "Create Docker artifacts",
-    "text": "Create Docker artifacts\nTo build a Docker image that can serve your model, you need three artifacts:\n\nthe Dockerfile itself,\na renv.lock to capture your model dependencies, and\nan plumber.R file containing the information to serve a vetiver REST API.\n\nYou can create all the needed files with one function.\n\nvetiver_prepare_docker(\n  board, \n  \"emil.hvitfeldt/flights_xgb\", \n  docker_args = list(port = 8080)\n)\n\n- The lockfile is already up to date.\n\n\n\n\n\n\n\n\nNote\n\n\n\nKeep an eye on the value of port, we want to make sure we use the same throughout the whole pipeline.\n\n\nFor ease of use, we make sure only to have CRAN versions of packages."
+    "text": "Create Docker artifacts\nTo build a Docker image that can serve your model, you need three artifacts:\n\nthe Dockerfile itself,\na renv.lock to capture your model dependencies, and\nan plumber.R file containing the information to serve a vetiver REST API.\n\nYou can create all the needed files with one function.\n\nvetiver_prepare_docker(\n  board, \n  \"emil.hvitfeldt/flights_xgb\", \n  docker_args = list(port = 8080)\n)\n\nThe following package(s) were installed from an unknown source:\n- recipes [1.0.10.9000]\nrenv may be unable to restore these packages in the future.\nConsider reinstalling these packages from a known source (e.g. CRAN).\n\nThe following package(s) will be updated in the lockfile:\n\n# CRAN -----------------------------------------------------------------------\n- backports     [1.4.1 -&gt; *]\n- base64enc     [0.1-3 -&gt; *]\n- config        [0.3.2 -&gt; *]\n- here          [1.0.1 -&gt; *]\n- keras         [2.13.0 -&gt; *]\n- png           [0.1-8 -&gt; *]\n- RcppTOML      [0.2.2 -&gt; *]\n- reticulate    [1.35.0 -&gt; *]\n- tensorflow    [2.15.0 -&gt; *]\n- tfautograph   [0.3.2 -&gt; *]\n- tfruns        [1.5.2 -&gt; *]\n- zeallot       [0.1.0 -&gt; *]\n\n# Local ----------------------------------------------------------------------\n- embed         [1.1.3 -&gt; 1.1.3.9000]\n\n# (Unknown Source) -----------------------------------------------------------\n- recipes       [1.0.10 -&gt; 1.0.10.9000]\n\n- Lockfile written to \"vetiver_renv.lock\".\n\n\n\n\n\n\n\n\nNote\n\n\n\nKeep an eye on the value of port, we want to make sure we use the same throughout the whole pipeline.\n\n\nFor ease of use, we make sure only to have CRAN versions of packages."
   },
   {
     "objectID": "pipelines/csv-connect-docker/index.html#build-and-run-your-dockerfile",
@@ -375,7 +375,7 @@
     "href": "pipelines/csv-connect-deploy/index.html#creating-vetiver-model",
     "title": "Posit Connect, CSV Input, Native Endpoint",
     "section": "Creating vetiver model",
-    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"flights_xgb\")\nv\n\n\n── flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
+    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"emil.hvitfeldt/flights_xgb\")\nv\n\n\n── emil.hvitfeldt/flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
   },
   {
     "objectID": "pipelines/csv-connect-deploy/index.html#version-model-with-pins-on-posit-connect",
@@ -571,7 +571,7 @@
     "href": "pipelines/pins-connect-deploy/index.html#creating-vetiver-model",
     "title": "Posit Connect, Pins Input, Native Endpoint",
     "section": "Creating vetiver model",
-    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"flights_xgb\")\nv\n\n\n── flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
+    "text": "Creating vetiver model\n\nv &lt;- xgb_last %&gt;%\n  extract_workflow() %&gt;%\n  vetiver_model(\"emil.hvitfeldt/flights_xgb\")\nv\n\n\n── emil.hvitfeldt/flights_xgb ─ &lt;bundled_workflow&gt; model for deployment \nA xgboost regression modeling workflow using 7 features"
   },
   {
     "objectID": "pipelines/pins-connect-deploy/index.html#version-model-with-pins-on-posit-connect",

@@ -53,7 +53,7 @@ glimpse(flights)
 ```{r}
 v <- xgb_last %>%
   extract_workflow() %>%
-  vetiver_model("flights_xgb")
+  vetiver_model("emil.hvitfeldt/flights_xgb")
 v
 ```
 
