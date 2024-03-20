@@ -404,7 +404,8 @@ Tip
 <div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that you don’t want to put quotes around the values.</p>
-<p>{vetiver} uses the {rsconnect} package to connect to Posit Connect, we need to make sure that we have the right authentication and settings. We can do this using <code>rsconnect::connectApiUser()</code>.</p>
+<p>{vetiver} uses the {rsconnect} package to connect to Posit Connect, we need to make sure that we are <a href="https://rstudio.github.io/rsconnect/#setup">setup correctly</a>.</p>
+<p>First, we need to register your server with rsconnect, this is done using <code>rsconnect::addServer(server = "https://example.com/")</code> with the correct url for the server. After we are connected, we can use the account and API key we just found with <code>rsconnect::connectApiUser()</code> to connect as an user.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rsconnect::connectApiUser(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  account = "account.name",</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  server = "https://example.com/", </span>
