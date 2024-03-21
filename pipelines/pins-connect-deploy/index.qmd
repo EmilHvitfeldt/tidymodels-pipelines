@@ -24,7 +24,9 @@ We are using the tidymodels package to do the modeling, [embed](https://embed.ti
 #| label: setup
 #| message: false
 # install.packages("pak")
-# pak::pak("tidymodels", "embed", "vetiver", "pins", "rsconnect")
+# pak::pak(c("tidymodels", "embed", "vetiver", "pins", "rsconnect", 
+# "doParallel", "lme4", "xgboost", "plumber", "cpp11", "dqrng", "RcppEigen",
+# "RcppProgress", "testthat", "BH", "sitmo"))
 library(tidymodels)
 library(embed)
 library(vetiver)
@@ -36,7 +38,7 @@ library(rsconnect)
 
 ::: new
 
-## Loading data from Posit Connect with pins
+## Getting set up on Posit Connect
 
 We will fetch data from and version the final model on [Posit Connect](https://posit.co/products/enterprise/connect/) using the [pins](https://pins.rstudio.com/) package.
 
