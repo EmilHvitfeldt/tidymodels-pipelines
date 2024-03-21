@@ -53,7 +53,7 @@ glimpse(flights)
 ```{r}
 v <- xgb_last %>%
   extract_workflow() %>%
-  vetiver_model("flights_xgb")
+  vetiver_model("emil.hvitfeldt/flights_xgb")
 v
 ```
 
@@ -63,7 +63,9 @@ We will version this model on [Posit Connect](https://posit.co/products/enterpri
 
 {{< include ../../_include-envvar-connect.qmd >}}
 
-{vetiver} uses the {rsconnect} package to connect to Posit Connect, we need to make sure that we have the right authentication and settings. We can do this using `rsconnect::connectApiUser()`.
+{vetiver} uses the {rsconnect} package to connect to Posit Connect, we need to make sure that we are [setup correctly](https://rstudio.github.io/rsconnect/#setup). 
+
+First, we need to register your server with rsconnect, this is done using `rsconnect::addServer(server = "https://example.com/")` with the correct url for the server. After we are connected, we can use the account and API key we just found with `rsconnect::connectApiUser()` to connect as an user.
 
 ```markdown
 rsconnect::connectApiUser(
