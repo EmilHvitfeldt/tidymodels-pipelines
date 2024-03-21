@@ -401,10 +401,16 @@ Tip
 </div>
 </div>
 <p><code>CONNECT_SERVER</code> is the URL of the posit connect page. So if your connect server is accessed through <code>https://example.com/connect/#/content/</code> then you can find <code>CONNECT_SERVER</code> by removing <code>connect/</code> and everything that follows it, leaving you with <code>https://example.com/</code>.</p>
-<p><code>CONNECT_API_KEY</code> is created through your Connect server. 1. Click on your name in the upper right upper right. 1. Click <code>API keys</code>. 1. Click <code>New API Key</code>. 1. Give your API a key, click `<code>Create Key</code>.</p>
+<p><code>CONNECT_API_KEY</code> is created through your Connect server.</p>
+<ol type="1">
+<li>Click on your name in the upper right.</li>
+<li>Click <code>API keys</code>.</li>
+<li>Click <code>New API Key</code>.</li>
+<li>Give your API key a name, click <code>Create Key</code>.</li>
+</ol>
 <p>Once you have those two, you can add them to your <code>.Renviron</code> file in the following format:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that you don’t want to put quotes around the values.</p>
 <p>Once that is all done, we can create a board that connects to Connect, and write our vetiver model to the board.</p>
 <div class="cell">
@@ -433,29 +439,7 @@ Tip
 renv may be unable to restore these packages in the future.
 Consider reinstalling these packages from a known source (e.g. CRAN).
 
-The following package(s) will be updated in the lockfile:
-
-# CRAN -----------------------------------------------------------------------
-- backports     [1.4.1 -&gt; *]
-- base64enc     [0.1-3 -&gt; *]
-- config        [0.3.2 -&gt; *]
-- here          [1.0.1 -&gt; *]
-- keras         [2.13.0 -&gt; *]
-- png           [0.1-8 -&gt; *]
-- RcppTOML      [0.2.2 -&gt; *]
-- reticulate    [1.35.0 -&gt; *]
-- tensorflow    [2.15.0 -&gt; *]
-- tfautograph   [0.3.2 -&gt; *]
-- tfruns        [1.5.2 -&gt; *]
-- zeallot       [0.1.0 -&gt; *]
-
-# Local ----------------------------------------------------------------------
-- embed         [1.1.3 -&gt; 1.1.3.9000]
-
-# (Unknown Source) -----------------------------------------------------------
-- recipes       [1.0.10 -&gt; 1.0.10.9000]
-
-- Lockfile written to "vetiver_renv.lock".</code></pre>
+- The lockfile is already up to date.</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">

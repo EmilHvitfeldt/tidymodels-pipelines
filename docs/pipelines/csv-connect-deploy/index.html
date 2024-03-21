@@ -399,10 +399,16 @@ Tip
 </div>
 </div>
 <p><code>CONNECT_SERVER</code> is the URL of the posit connect page. So if your connect server is accessed through <code>https://example.com/connect/#/content/</code> then you can find <code>CONNECT_SERVER</code> by removing <code>connect/</code> and everything that follows it, leaving you with <code>https://example.com/</code>.</p>
-<p><code>CONNECT_API_KEY</code> is created through your Connect server. 1. Click on your name in the upper right upper right. 1. Click <code>API keys</code>. 1. Click <code>New API Key</code>. 1. Give your API a key, click `<code>Create Key</code>.</p>
+<p><code>CONNECT_API_KEY</code> is created through your Connect server.</p>
+<ol type="1">
+<li>Click on your name in the upper right.</li>
+<li>Click <code>API keys</code>.</li>
+<li>Click <code>New API Key</code>.</li>
+<li>Give your API key a name, click <code>Create Key</code>.</li>
+</ol>
 <p>Once you have those two, you can add them to your <code>.Renviron</code> file in the following format:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CONNECT_SERVER=https://example.com/</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CONNECT_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that you don’t want to put quotes around the values.</p>
 <p>{vetiver} uses the {rsconnect} package to connect to Posit Connect, we need to make sure that we are <a href="https://rstudio.github.io/rsconnect/#setup">setup correctly</a>.</p>
 <p>First, we need to register your server with rsconnect, this is done using <code>rsconnect::addServer(server = "https://example.com/")</code> with the correct url for the server. After we are connected, we can use the account and API key we just found with <code>rsconnect::connectApiUser()</code> to connect as an user.</p>

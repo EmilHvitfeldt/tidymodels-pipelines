@@ -132,17 +132,6 @@
       "Repository": "CRAN",
       "Hash": "1c0aa18b97e6aaa17f93b8b866c0ace5"
     },
-    "RcppTOML": {
-      "Package": "RcppTOML",
-      "Version": "0.2.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "Rcpp"
-      ],
-      "Hash": "c232938949fcd8126034419cc529333a"
-    },
     "SQUAREM": {
       "Package": "SQUAREM",
       "Version": "2021.1",
@@ -162,16 +151,6 @@
         "sys"
       ],
       "Hash": "cad6cf7f1d5f6e906700b9d3e718c796"
-    },
-    "backports": {
-      "Package": "backports",
-      "Version": "1.4.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "c39fbec8a30d23e721980b8afb31984c"
     },
     "base64enc": {
       "Package": "base64enc",
@@ -363,16 +342,6 @@
       ],
       "Hash": "f20c47fd52fae58b4e377c37bb8c335b"
     },
-    "config": {
-      "Package": "config",
-      "Version": "0.3.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "yaml"
-      ],
-      "Hash": "8b7222e9d9eb5178eea545c0c4d33fc2"
-    },
     "cpp11": {
       "Package": "cpp11",
       "Version": "0.4.7",
@@ -517,22 +486,21 @@
     },
     "embed": {
       "Package": "embed",
-      "Version": "1.1.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "1.1.3.9000",
+      "Source": "Local",
+      "RemotePkgRef": "local::/Users/emilhvitfeldt/Github/embed",
+      "RemoteType": "local",
       "Requirements": [
         "R",
         "dplyr",
         "generics",
         "glue",
-        "keras",
         "lifecycle",
         "purrr",
         "recipes",
         "rlang",
         "rsample",
         "stats",
-        "tensorflow",
         "tibble",
         "tidyr",
         "utils",
@@ -540,7 +508,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "d8792e751c8d6be84228ed6b9f0a56b2"
+      "Hash": "e6e2427e39e041a076f1ae3b26e82011"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -730,16 +698,6 @@
       ],
       "Hash": "921fd010cd788de75a9c71c2c3aee1f2"
     },
-    "here": {
-      "Package": "here",
-      "Version": "1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "rprojroot"
-      ],
-      "Hash": "24b224366f9c2e7534d2344d10d59211"
-    },
     "hms": {
       "Package": "hms",
       "Version": "1.1.3",
@@ -833,26 +791,6 @@
         "methods"
       ],
       "Hash": "e1b9c55281c5adc4dd113652d9e26768"
-    },
-    "keras": {
-      "Package": "keras",
-      "Version": "2.13.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "generics",
-        "glue",
-        "magrittr",
-        "methods",
-        "reticulate",
-        "rlang",
-        "tensorflow",
-        "tfruns",
-        "zeallot"
-      ],
-      "Hash": "311b595378023f7db42eebb614cd7e75"
     },
     "labeling": {
       "Package": "labeling",
@@ -1299,16 +1237,6 @@
       ],
       "Hash": "8b65a7a00ef8edc5ddc6fabf0aff1194"
     },
-    "png": {
-      "Package": "png",
-      "Version": "0.1-8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "bd54ba8a0a5faded999a7aab6e46b374"
-    },
     "praise": {
       "Package": "praise",
       "Version": "1.0.0",
@@ -1468,9 +1396,8 @@
     },
     "recipes": {
       "Package": "recipes",
-      "Version": "1.0.10",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "1.0.10.9000",
+      "Source": "unknown",
       "Requirements": [
         "Matrix",
         "R",
@@ -1497,7 +1424,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "69783cdd607c58fffb21c5c26c6ededf"
+      "Hash": "aef431f19b13deff042854f46ee06ff6"
     },
     "rematch2": {
       "Package": "rematch2",
@@ -1518,28 +1445,6 @@
         "utils"
       ],
       "Hash": "41b847654f567341725473431dd0d5ab"
-    },
-    "reticulate": {
-      "Package": "reticulate",
-      "Version": "1.35.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "Matrix",
-        "R",
-        "Rcpp",
-        "RcppTOML",
-        "graphics",
-        "here",
-        "jsonlite",
-        "methods",
-        "png",
-        "rappdirs",
-        "rlang",
-        "utils",
-        "withr"
-      ],
-      "Hash": "90be16b53b955990db4aa355c03d85eb"
     },
     "rlang": {
       "Package": "rlang",
@@ -1599,13 +1504,6 @@
         "vctrs"
       ],
       "Hash": "b20bb09ceef690842b44585ef49db74e"
-    },
-    "rstudioapi": {
-      "Package": "rstudioapi",
-      "Version": "0.15.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5564500e25cffad9e22244ced1379887"
     },
     "scales": {
       "Package": "scales",
@@ -1732,26 +1630,6 @@
       "Repository": "CRAN",
       "Hash": "3a1be13d68d47a8cd0bfd74739ca1555"
     },
-    "tensorflow": {
-      "Package": "tensorflow",
-      "Version": "2.15.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "config",
-        "grDevices",
-        "lifecycle",
-        "processx",
-        "reticulate",
-        "rstudioapi",
-        "tfautograph",
-        "tfruns",
-        "utils",
-        "yaml"
-      ],
-      "Hash": "5cbbc5d5d7cfd16678035eb6b905f50b"
-    },
     "testthat": {
       "Package": "testthat",
       "Version": "3.2.1",
@@ -1780,39 +1658,6 @@
         "withr"
       ],
       "Hash": "4767a686ebe986e6cb01d075b3f09729"
-    },
-    "tfautograph": {
-      "Package": "tfautograph",
-      "Version": "0.3.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "backports",
-        "reticulate"
-      ],
-      "Hash": "f49f95df7561c477ac2370809fde9d61"
-    },
-    "tfruns": {
-      "Package": "tfruns",
-      "Version": "1.5.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "base64enc",
-        "config",
-        "jsonlite",
-        "magrittr",
-        "reticulate",
-        "rlang",
-        "rstudioapi",
-        "tidyselect",
-        "utils",
-        "whisker",
-        "yaml"
-      ],
-      "Hash": "f2193f71320c7d006fbff9880b4188f0"
     },
     "tibble": {
       "Package": "tibble",
@@ -2125,13 +1970,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "29240487a071f535f5e5d5a323b7afbd"
-    },
-    "zeallot": {
-      "Package": "zeallot",
-      "Version": "0.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ee9b643aa8331c45d8d82eb3a137c9bc"
     }
   }
 }
