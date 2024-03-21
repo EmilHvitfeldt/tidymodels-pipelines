@@ -46,7 +46,7 @@ We will fetch data from and version the final model on [Posit Connect](https://p
 
 ## Loading Data
 
-We are using the smaller `laxflights2022` data set described on the [data preparation](../../data-prep.qmd) page. The data set has been uploaded to pins, as described on the [data pins](../../data-pins.qmd#posit-connect) page. This is meant to simulate this workflow where we stay inside Connect as much as possible.
+We are using a dataset stored in pin, simulating a workflow where we stay inside Connect as much as possible. The [data preparation](../../data-prep.qmd) page describes how we prepared the data set and the [data pins](../../data-pins.qmd#posit-connect) page describes how we uploaded it to pins. Do those steps first and then read your own pin instead of `"emil.hvitfeldt/laxflights2022_lite"`.
 
 ```{r}
 #| label: loading-data
