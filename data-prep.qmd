@@ -41,13 +41,12 @@ laxflights2022raw <- read_csv("data-raw/laxflights2022raw.csv", show_col_types =
 If you are having issues with downloading this data all at once then you can split up the download into smaller chunks like so:
 
 ```r
-laxflights1 <- anyflights("LAX", 2022, 1:6)
-laxflights2 <- anyflights("LAX", 2022, 7:12)
-
+laxflights1 <- get_flights("LAX", 2022, 1:6)
+laxflights2 <- get_flights("LAX", 2022, 7:12)
 
 laxflights2022raw <- dplyr::bind_rows(
-  laxflights1$flights,
-  laxflights2$flights
+  laxflights1,
+  laxflights2
 )
 ```
 :::
